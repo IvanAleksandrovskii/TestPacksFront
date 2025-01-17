@@ -1,9 +1,10 @@
-// src/components/EditQuiz.jsx
+// src/pages/EditQuiz.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import QuestionForm from '../components/QuestionForm';
 import { quizApi } from "../api/quizApi";
+
 
 const EditQuiz = ({ creatorId }) => {
     const { id } = useParams();
@@ -26,6 +27,17 @@ const EditQuiz = ({ creatorId }) => {
         fetchTest();
     }, [id, creatorId]);
 
+    const addQuestion = () => {
+        setQuestions([
+            ...questions,
+            {
+                question_text: '',
+                is_quiz_type: false,
+                answers: [],
+            },
+        ]);
+    };
+
     const updateQuestion = (index, field, value) => {
         const updatedQuestions = [...questions];
         updatedQuestions[index][field] = value;
@@ -34,8 +46,10 @@ const EditQuiz = ({ creatorId }) => {
 
     const addAnswer = (index) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[index].answers.push({ text: "", score: 0 });
-        setQuestions(updatedQuestions);
+        if (updatedQuestions[index].answers.length < 6) {
+            updatedQuestions[index].answers.push({ text: "", score: 0 });
+            setQuestions(updatedQuestions);
+        }
     };
 
     const updateAnswer = (qIdx, aIdx, field, value) => {
@@ -66,7 +80,7 @@ const EditQuiz = ({ creatorId }) => {
                     is_quiz_type: q.is_quiz_type ?? true,
                     answers: q.answers.map(a => ({
                         text: a.text,
-                        score: Number(a.score)  // Ensure score is a number
+                        score: Number(a.score)
                     }))
                 }))
             };
@@ -82,7 +96,7 @@ const EditQuiz = ({ creatorId }) => {
     return (
         <div>
             <h1>Edit Test</h1>
-            <div>
+            <div style={{ marginBottom: '10px' }}>
                 <label>Test Name:</label>
                 <br />
                 <input
@@ -92,7 +106,7 @@ const EditQuiz = ({ creatorId }) => {
                 />
             </div>
 
-            <div>
+            <div style={{ marginBottom: '10px' }}>
                 <label>Description:</label>
                 <br />
                 <textarea
@@ -115,9 +129,16 @@ const EditQuiz = ({ creatorId }) => {
                 />
             ))}
 
-            <button onClick={handleSubmit}>Save Changes</button>
+            <div style={{ marginTop: '20px' }}>
+                <button onClick={addQuestion}>Add Question</button>
+            </div>
+            
+            <div style={{ marginTop: '20px' }}>
+                <button onClick={handleSubmit}>Save Changes</button>
+            </div>
         </div>
     );
 };
+
 
 export default EditQuiz;
