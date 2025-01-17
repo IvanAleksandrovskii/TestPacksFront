@@ -28,10 +28,13 @@ export const quizApi = {
   },
 
   updateTest: async (testId, testData, creatorId) => {
-    const response = await axios.put(`${BASE_URL}/api/custom_test_update/${testId}`, {
-      creator_id: creatorId,
-      ...testData, // Остальные данные теста
-    });
+    const response = await axios.put(
+      `${BASE_URL}/api/custom_test_update/${testId}`, 
+      testData,  // Send just the test data in the body
+      {
+        params: { creator_id: Number(creatorId) }  // Send creator_id as query param
+      }
+    );
     return response.data;
   },
 
