@@ -1,149 +1,120 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import QuestionForm from '../components/QuestionForm';
 import { quizApi } from '../api/quizApi';
 
-const CreateQuiz = () => {
-  const [testName, setTestName] = useState("");
-  const [description, setDescription] = useState("");
-  const [creatorId, setCreatorId] = useState("");
-  const [allowBack, setAllowBack] = useState(true);
-  const [questions, setQuestions] = useState([]);
+const CreateQuiz = ({ tgUser }) => {
+    const [testName, setTestName] = useState('');
+    const [description, setDescription] = useState('');
+    const [creatorId, setCreatorId] = useState('');
+    const [allowBack, setAllowBack] = useState(true);
+    const [questions, setQuestions] = useState([]);
 
-  const addQuestion = () => {
-    setQuestions([
-      ...questions,
-      {
-        question_text: "",
-        is_quiz_type: false,
-        answers: [],
-      },
-    ]);
-  };
-
-  const removeQuestion = (index) => {
-    const updatedQuestions = questions.filter((_, qIndex) => qIndex !== index);
-    setQuestions(updatedQuestions);
-  };
-
-  const updateQuestion = (index, field, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index][field] = value;
-
-    if (field === "is_quiz_type") {
-      if (value) {
-        if (updatedQuestions[index].answers.length === 0) {
-          updatedQuestions[index].answers.push({ text: "", score: 0 });
+    useEffect(() => {
+        if (tgUser) {
+            setCreatorId(tgUser.id);
         }
-      } else {
-        updatedQuestions[index].answers = [];
-      }
-    }
+    }, [tgUser]);
 
-    setQuestions(updatedQuestions);
-  };
-
-  const addAnswer = (questionIndex) => {
-    const updatedQuestions = [...questions];
-    if (updatedQuestions[questionIndex].answers.length < 6) {
-      updatedQuestions[questionIndex].answers.push({ text: "", score: 0 });
-      setQuestions(updatedQuestions);
-    }
-  };
-
-  const removeAnswer = (questionIndex, answerIndex) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].answers = updatedQuestions[questionIndex].answers.filter(
-      (_, aIndex) => aIndex !== answerIndex
-    );
-    setQuestions(updatedQuestions);
-  };
-
-  const updateAnswer = (questionIndex, answerIndex, field, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].answers[answerIndex][field] = value;
-    setQuestions(updatedQuestions);
-  };
-
-  const submitTest = async () => {
-    const testPayload = {
-      name: testName,
-      description,
-      creator_id: parseInt(creatorId),
-      allow_back: allowBack,
-      questions,
+    const addQuestion = () => {
+        setQuestions([
+            ...questions,
+            {
+                question_text: '',
+                is_quiz_type: false,
+                answers: [],
+            },
+        ]);
     };
 
-    try {
-      const response = await quizApi.createTest(testPayload);
-      alert(`Test created with ID: ${response.id}`);
-    } catch (error) {
-      console.error("Error creating test:", error);
-      alert("Failed to create test. Check the console for details.");
-    }
-  };
+    const submitTest = async () => {
+        const testPayload = {
+            name: testName,
+            description,
+            creator_id: parseInt(creatorId),
+            allow_back: allowBack,
+            questions,
+        };
 
-  return (
-    <div>
-      <h1>Create Custom Test</h1>
+        try {
+            const response = await quizApi.createTest(testPayload);
+            alert(`Test created with ID: ${response.id}`);
+        } catch (error) {
+            console.error('Error creating test:', error);
+            alert('Failed to create test. Check the console for details.');
+        }
+    };
 
-      <div style={{ marginBottom: "10px" }}>
-        <label>Test Name:</label>
-        <br />
-        <input
-          type="text"
-          value={testName}
-          onChange={(e) => setTestName(e.target.value)}
-        />
-      </div>
+    return (
+        <div>
+            <h1>Create Custom Test</h1>
 
-      <div style={{ marginBottom: "10px" }}>
-        <label>Description:</label>
-        <br />
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
+            <div style={{ marginBottom: '10px' }}>
+                <label>Test Name:</label>
+                <br />
+                <input
+                    type="text"
+                    value={testName}
+                    onChange={(e) => setTestName(e.target.value)}
+                />
+            </div>
 
-      <div style={{ marginBottom: "10px" }}>
-        <label>Creator ID: (Будет получено из telegram)</label>
-        <br />
-        <input
-          type="number"
-          value={creatorId}
-          onChange={(e) => setCreatorId(e.target.value)}
-        />
-      </div>
+            <div style={{ marginBottom: '10px' }}>
+                <label>Description:</label>
+                <br />
+                <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+            </div>
 
-      <div style={{ marginBottom: "20px" }}>
-        <label>Allow Back:</label>
-        <br />
-        <input
-          type="checkbox"
-          checked={allowBack}
-          onChange={(e) => setAllowBack(e.target.checked)}
-        />
-      </div>
+            <div style={{ marginBottom: '20px' }}>
+                <label>Allow Back:</label>
+                <br />
+                <input
+                    type="checkbox"
+                    checked={allowBack}
+                    onChange={(e) => setAllowBack(e.target.checked)}
+                />
+            </div>
 
-      <h2>Questions</h2>
-      {questions.map((question, index) => (
-        <QuestionForm
-          key={index}
-          question={question}
-          index={index}
-          updateQuestion={updateQuestion}
-          removeQuestion={removeQuestion}
-          addAnswer={addAnswer}
-          removeAnswer={removeAnswer}
-          updateAnswer={updateAnswer}
-        />
-      ))}
+            <h2>Questions</h2>
+            {questions.map((question, index) => (
+                <QuestionForm
+                    key={index}
+                    question={question}
+                    index={index}
+                    updateQuestion={(idx, field, value) => {
+                        const updatedQuestions = [...questions];
+                        updatedQuestions[idx][field] = value;
+                        setQuestions(updatedQuestions);
+                    }}
+                    removeQuestion={(idx) => setQuestions(questions.filter((_, i) => i !== idx))}
+                    addAnswer={(idx) => {
+                        const updatedQuestions = [...questions];
+                        if (updatedQuestions[idx].answers.length < 6) {
+                            updatedQuestions[idx].answers.push({ text: '', score: 0 });
+                            setQuestions(updatedQuestions);
+                        }
+                    }}
+                    removeAnswer={(qIdx, aIdx) => {
+                        const updatedQuestions = [...questions];
+                        updatedQuestions[qIdx].answers = updatedQuestions[qIdx].answers.filter(
+                            (_, i) => i !== aIdx
+                        );
+                        setQuestions(updatedQuestions);
+                    }}
+                    updateAnswer={(qIdx, aIdx, field, value) => {
+                        const updatedQuestions = [...questions];
+                        updatedQuestions[qIdx].answers[aIdx][field] = value;
+                        setQuestions(updatedQuestions);
+                    }}
+                />
+            ))}
 
-      <button onClick={addQuestion}>Add Question</button>
-      <button onClick={submitTest} style={{ marginTop: "20px" }}>Submit Test</button>
-    </div>
-  );
+            <button onClick={addQuestion}>Add Question</button>
+            <button onClick={submitTest} style={{ marginTop: '20px' }}>Submit Test</button>
+        </div>
+    );
 };
-
 
 export default CreateQuiz;
