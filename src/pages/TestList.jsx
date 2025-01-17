@@ -1,13 +1,30 @@
 // src/pages/TestList.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 
 import { quizApi } from "../api/quizApi";
+
+
+Modal.setAppElement("#root");
+
+
+const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
+    <Modal isOpen={isOpen} onRequestClose={onCancel} style={modalStyles}>
+        <h2>Вы уверены, что хотите удалить этот тест?</h2>
+        <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
+            <button style={styles.confirmButton} onClick={onConfirm}>Да</button>
+            <button style={styles.cancelButton} onClick={onCancel}>Нет</button>
+        </div>
+    </Modal>
+);
 
 
 const TestList = ({ tgUser }) => {
     const [tests, setTests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [testToDelete, setTestToDelete] = useState(null); // ID теста для удаления
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,22 +39,34 @@ const TestList = ({ tgUser }) => {
                 setIsLoading(false);
             }
         };
-        // Запускаем загрузку только если у нас есть реальный ID пользователя
         if (tgUser && tgUser.id !== 111) {
             fetchTests();
         }
-    }, [tgUser]); // Добавляем tgUser в зависимости
+    }, [tgUser]);
 
-    const handleDelete = async (id) => {
+    const handleDelete = async () => {
+        if (!testToDelete) return;
         try {
-            await quizApi.deleteTest(id, tgUser.id);
-            setTests(tests.filter((test) => test.id !== id));
+            await quizApi.deleteTest(testToDelete, tgUser.id);
+            setTests(tests.filter((test) => test.id !== testToDelete));
         } catch (error) {
             console.error("Failed to delete test", error);
+        } finally {
+            setModalOpen(false);
+            setTestToDelete(null);
         }
     };
 
-    // Показываем сообщение о загрузке
+    const openModal = (testId) => {
+        setTestToDelete(testId);
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setTestToDelete(null);
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -52,12 +81,54 @@ const TestList = ({ tgUser }) => {
                         <span>{test.name}</span>
                         <br />
                         <button onClick={() => navigate(`/edit/${test.id}`)}>Edit</button>
-                        <button onClick={() => handleDelete(test.id)}>Delete</button>
+                        <button onClick={() => openModal(test.id)}>Delete</button>
                     </li>
                 ))}
             </ul>
+
+            <DeleteConfirmation
+                isOpen={isModalOpen}
+                onConfirm={handleDelete}
+                onCancel={closeModal}
+            />
         </div>
     );
+};
+
+
+const modalStyles = {
+    content: {
+        top: "50%",
+        left: "50%",
+        right: "auto",
+        bottom: "auto",
+        marginRight: "-50%",
+        transform: "translate(-50%, -50%)",
+        padding: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+        textAlign: "center",
+    },
+};
+
+
+const styles = {
+    confirmButton: {
+        backgroundColor: "red",
+        color: "white",
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+    },
+    cancelButton: {
+        backgroundColor: "gray",
+        color: "white",
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+    },
 };
 
 
