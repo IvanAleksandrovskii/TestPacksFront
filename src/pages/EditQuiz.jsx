@@ -3,23 +3,20 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import QuestionForm from '../components/QuestionForm';
+import QuizForm from "../components/QuizForm";
 import { quizApi } from "../api/quizApi";
 
 
 const EditQuiz = ({ creatorId }) => {
     const { id } = useParams();
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [questions, setQuestions] = useState([]);
     const navigate = useNavigate();
+    const [initialData, setInitialData] = useState(null);
 
     useEffect(() => {
         const fetchTest = async () => {
             try {
                 const test = await quizApi.getTest(id, creatorId);
-                setName(test.name);
-                setDescription(test.description);
-                setQuestions(test.questions || []);
+                setInitialData(test);
             } catch (error) {
                 console.error("Failed to fetch test", error);
             }
@@ -27,118 +24,32 @@ const EditQuiz = ({ creatorId }) => {
         fetchTest();
     }, [id, creatorId]);
 
-    const addQuestion = () => {
-        setQuestions([
-            ...questions,
-            {
-                question_text: '',
-                is_quiz_type: false,
-                answers: [],
-            },
-        ]);
-    };
-
-    const updateQuestion = (index, field, value) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[index][field] = value;
-        setQuestions(updatedQuestions);
-    };
-
-    const addAnswer = (index) => {
-        const updatedQuestions = [...questions];
-        if (updatedQuestions[index].answers.length < 6) {
-            updatedQuestions[index].answers.push({ text: "", score: 0 });
-            setQuestions(updatedQuestions);
-        }
-    };
-
-    const updateAnswer = (qIdx, aIdx, field, value) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[qIdx].answers[aIdx][field] = value;
-        setQuestions(updatedQuestions);
-    };
-
-    const removeAnswer = (qIdx, aIdx) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[qIdx].answers = updatedQuestions[qIdx].answers.filter(
-            (_, i) => i !== aIdx
-        );
-        setQuestions(updatedQuestions);
-    };
-
-    const removeQuestion = (index) => {
-        setQuestions(questions.filter((_, i) => i !== index));
-    };
-
-    const handleSubmit = async () => {
+    const handleSubmit = async (formData) => {
         try {
-            const testData = {
-                name,
-                description,
-                questions: questions.map(q => ({
-                    question_text: q.question_text,
-                    is_quiz_type: q.is_quiz_type ?? true,
-                    answers: q.answers.map(a => ({
-                        text: a.text,
-                        score: Number(a.score)
-                    }))
-                }))
-            };
-            
-            await quizApi.updateTest(id, testData, creatorId);
+            await quizApi.updateTest(id, formData, creatorId);
             navigate("/");
         } catch (error) {
             console.error("Failed to update test", error);
-            // Optionally show error to user
+            alert('Failed to update test. Check the console for details.');
         }
     };
 
+    if (!initialData) {
+        return <div className="text-center text-gray-500">Loading...</div>;
+    }
+
     return (
         <div>
-            <h1>Edit Test</h1>
-            <div style={{ marginBottom: '10px' }}>
-                <label>Test Name:</label>
-                <br />
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-            </div>
-
-            <div style={{ marginBottom: '10px' }}>
-                <label>Description:</label>
-                <br />
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-            </div>
-
-            <h2>Questions</h2>
-            {questions.map((question, index) => (
-                <QuestionForm
-                    key={index}
-                    question={question}
-                    index={index}
-                    updateQuestion={updateQuestion}
-                    removeQuestion={removeQuestion}
-                    addAnswer={addAnswer}
-                    removeAnswer={removeAnswer}
-                    updateAnswer={updateAnswer}
-                />
-            ))}
-
-            <div style={{ marginTop: '20px' }}>
-                <button onClick={addQuestion}>Add Question</button>
-            </div>
-            
-            <div style={{ marginTop: '20px' }}>
-                <button onClick={handleSubmit}>Save Changes</button>
-            </div>
+            <h1 className="text-2xl font-bold mb-6" style={{ textAlign: 'center' }}>Edit Test</h1>
+            <QuizForm
+                initialName={initialData.name}
+                initialDescription={initialData.description}
+                initialAllowBack={initialData.allow_back}
+                onSubmit={handleSubmit}
+                buttonText="Save Changes"
+            />
         </div>
     );
 };
-
 
 export default EditQuiz;
