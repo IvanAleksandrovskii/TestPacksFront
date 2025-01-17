@@ -38,7 +38,7 @@ export const quizApi = {
   // Удалить тест с проверкой creator_id
   deleteTest: async (testId, creatorId) => {
     const response = await axios.delete(`${BASE_URL}/api/custom_test/${testId}`, {
-      data: { creator_id: creatorId },
+        params: { creator_id: Number(creatorId) }, // Передаём как параметр запроса
     });
     return response.data;
   },
