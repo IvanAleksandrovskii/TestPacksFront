@@ -1,9 +1,11 @@
 // src/components/EditQuiz.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
 import { quizApi } from "../api/quizApi";
 
-const EditQuiz = (creatorId) => {
+
+const EditQuiz = ({ creatorId }) => { // Деструктуризация пропса
     const { id } = useParams();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -12,7 +14,7 @@ const EditQuiz = (creatorId) => {
     useEffect(() => {
         const fetchTest = async () => {
             try {
-                const test = await quizApi.getTest(id, creatorId);
+                const test = await quizApi.getTest(id, creatorId); // Передаём значение, а не объект
                 setName(test.name);
                 setDescription(test.description);
             } catch (error) {
@@ -20,11 +22,11 @@ const EditQuiz = (creatorId) => {
             }
         };
         fetchTest();
-    }, [id]);
+    }, [id, creatorId]);
 
     const handleSubmit = async () => {
         try {
-            await quizApi.updateTest(id, { name, description });
+            await quizApi.updateTest(id, { name, description }, creatorId); // Передаём creatorId
             navigate("/");
         } catch (error) {
             console.error("Failed to update test", error);
