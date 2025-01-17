@@ -1,5 +1,7 @@
 // src/pages/CreateQuiz.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import QuestionForm from '../components/QuestionForm';
 import { quizApi } from '../api/quizApi';
 
@@ -9,6 +11,7 @@ const CreateQuiz = ({ tgUser }) => {
     const [creatorId, setCreatorId] = useState('');
     const [allowBack, setAllowBack] = useState(true);
     const [questions, setQuestions] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (tgUser) {
@@ -43,6 +46,7 @@ const CreateQuiz = ({ tgUser }) => {
             console.error('Error creating test:', error);
             alert('Failed to create test. Check the console for details.');
         }
+        navigate("/");
     };
 
     return (

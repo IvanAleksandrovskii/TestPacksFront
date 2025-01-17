@@ -51,7 +51,8 @@ const App = () => {
           <Route path="/edit/:id" element={<EditQuiz creatorId={tgUser?.id} />} />
         </Routes>
       </div>
-      <div style={{
+      {
+      tgUser && tgUser.id !== 111 && <div style={{
           padding: '20px',
           color: 'white',
           backgroundColor: 'gray',
@@ -59,8 +60,9 @@ const App = () => {
           margin: '0 auto',  // Центрирование блока
           wordWrap: 'break-word' // Перенос слов при необходимости
       }}>
-        {tgUser && <p>tgUser: {JSON.stringify(tgUser)}</p>}
+        {<p>tgUser: {JSON.stringify(tgUser)}</p>}
       </div>
+      }
     </Router>
   );
 };

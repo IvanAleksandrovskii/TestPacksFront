@@ -11,10 +11,10 @@ Modal.setAppElement("#root");
 
 const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
     <Modal isOpen={isOpen} onRequestClose={onCancel} style={modalStyles}>
-        <h2>Вы уверены, что хотите удалить этот тест?</h2>
+        <h2>Are you sure you want to delete this test?</h2>
         <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
-            <button style={styles.confirmButton} onClick={onConfirm}>Да</button>
-            <button style={styles.cancelButton} onClick={onCancel}>Нет</button>
+            <button style={styles.confirmButton} onClick={onConfirm}>Yes</button>
+            <button style={styles.cancelButton} onClick={onCancel}>No</button>
         </div>
     </Modal>
 );
@@ -84,6 +84,7 @@ const TestList = ({ tgUser }) => {
                         <button onClick={() => openModal(test.id)}>Delete</button>
                     </li>
                 ))}
+                {tests.length === 0 && <p>No tests created yet</p>}
             </ul>
 
             <DeleteConfirmation
