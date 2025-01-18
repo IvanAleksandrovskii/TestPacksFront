@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import QuestionForm from '../components/QuestionForm';
 import { quizApi } from '../api/quizApi';
 import QuizForm from '../components/QuizForm';
 

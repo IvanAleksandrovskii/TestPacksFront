@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-
 const QuizForm = ({
     initialName = '',
     initialDescription = '',
+    initialQuestions = [{
+        question_text: '',
+        answers: []
+    }],
     onSubmit,
     allowBackOption = false,
     initialAllowBack = true,
@@ -12,24 +15,26 @@ const QuizForm = ({
     const [name, setName] = useState(initialName);
     const [description, setDescription] = useState(initialDescription);
     const [allowBack, setAllowBack] = useState(initialAllowBack);
-    const [questions, setQuestions] = useState([{
-        question_text: '',
-        is_quiz_type: false,
-        answers: []
-    }]);
+    const [questions, setQuestions] = useState(initialQuestions);
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
+    const [isInitialized, setIsInitialized] = useState(false);
 
+    // Update form only once when component mounts or when initial values change significantly
     useEffect(() => {
-        if (questions.length === 0) {
-            setQuestions([{
+        if (!isInitialized) {
+            setName(initialName);
+            setDescription(initialDescription);
+            setAllowBack(initialAllowBack);
+            setQuestions(initialQuestions.length > 0 ? initialQuestions : [{
                 question_text: '',
-                is_quiz_type: false,
                 answers: []
             }]);
+            setIsInitialized(true);
         }
-    }, [questions]);
+    }, [initialName, initialDescription, initialAllowBack, initialQuestions, isInitialized]);
 
+    // Rest of your component code remains the same...
     const validate = () => {
         const newErrors = {};
 
@@ -46,21 +51,6 @@ const QuizForm = ({
 
             if (!question.question_text.trim()) {
                 qError.question_text = 'Question text is required';
-            }
-
-            if (question.answers.length < 1 && question.is_quiz_type) {
-                qError.answers = 'At least 1 answers are required';
-            } else {
-                const answerErrors = question.answers.map(answer => {
-                    const aError = {};
-                    if (!answer.text.trim()) {
-                        aError.text = 'Answer text is required';
-                    }
-                    return Object.keys(aError).length > 0 ? aError : null;
-                });
-                if (answerErrors.some(e => e !== null)) {
-                    qError.answerErrors = answerErrors;
-                }
             }
 
             return Object.keys(qError).length > 0 ? qError : null;
@@ -94,7 +84,6 @@ const QuizForm = ({
                 allow_back: allowBack,
                 questions: questions.map(q => ({
                     question_text: q.question_text,
-                    is_quiz_type: q.is_quiz_type ?? true,
                     answers: q.answers.map(a => ({
                         text: a.text,
                         score: Number(a.score)
@@ -109,7 +98,6 @@ const QuizForm = ({
             ...questions,
             {
                 question_text: '',
-                is_quiz_type: false,
                 answers: [],
             },
         ]);
@@ -140,8 +128,7 @@ const QuizForm = ({
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         onBlur={() => setTouched({ ...touched, name: true })}
-                        className={`w-full p-2 border rounded ${touched.name && errors.name ? 'border-red-500' : 'border-gray-300'
-                            }`}
+                        className={`w-full p-2 border rounded ${touched.name && errors.name ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     <ErrorMessage message={touched.name && errors.name} />
                 </div>
@@ -153,8 +140,7 @@ const QuizForm = ({
                         style={{ color: 'black' }}
                         onChange={(e) => setDescription(e.target.value)}
                         onBlur={() => setTouched({ ...touched, description: true })}
-                        className={`w-full p-2 border rounded ${touched.description && errors.description ? 'border-red-500' : 'border-gray-300'
-                            }`}
+                        className={`w-full p-2 border rounded ${touched.description && errors.description ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     <ErrorMessage message={touched.description && errors.description} />
                 </div>
@@ -179,9 +165,9 @@ const QuizForm = ({
                         <div
                             key={qIndex}
                             className={`p-4 border rounded ${touched.questions?.[qIndex] && errors.questions?.[qIndex]
-                                    ? 'border-red-500'
-                                    : 'border-gray-300'
-                                }`}
+                                ? 'border-red-500'
+                                : 'border-gray-300'
+                            }`}
                         >
                             <div className="space-y-4">
                                 <div>
