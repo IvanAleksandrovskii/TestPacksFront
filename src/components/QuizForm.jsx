@@ -207,7 +207,14 @@ const QuizForm = ({
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Answers:</label>
+                                    <div className="flex justify-between items-center mb-2">
+                                        <label className="block text-sm font-medium">Answers with scores:</label>
+                                        {question.answers.length === 0 && (
+                                            <span className="text-sm text-gray-600 italic">
+                                                This will be a free form answer question
+                                            </span>
+                                        )}
+                                    </div>
                                     {question.answers.map((answer, aIndex) => (
                                         <div 
                                             key={aIndex} 
@@ -236,6 +243,7 @@ const QuizForm = ({
                                                 }}
                                                 className="w-20 p-2 border rounded"
                                                 placeholder="Score"
+                                                title="Enter the score value"
                                             />
                                             <button
                                                 onClick={() => {
@@ -250,21 +258,43 @@ const QuizForm = ({
                                             </button>
                                         </div>
                                     ))}
-                                    {/** Показ ошибки, если у каких-то ответов пустой текст */}
                                     {errors.questions?.[qIndex]?.answers && (
                                         <ErrorMessage message={errors.questions[qIndex].answers} />
                                     )}
                                     {question.answers.length < 6 && (
-                                        <button
-                                            onClick={() => {
-                                                const updatedQuestions = [...questions];
-                                                updatedQuestions[qIndex].answers.push({ text: '', score: 0 });
-                                                setQuestions(updatedQuestions);
-                                            }}
-                                            className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                                        >
-                                            Add Answer
-                                        </button>
+                                        <div className="mt-2 grid grid-cols-2 gap-2">
+                                            {question.answers.length > 0 ? (
+                                                <>
+                                                    <button
+                                                        onClick={() => {
+                                                            const updatedQuestions = [...questions];
+                                                            updatedQuestions[qIndex].answers.push({ text: '', score: 0 });
+                                                            setQuestions(updatedQuestions);
+                                                        }}
+                                                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                                    >
+                                                        Add Answer
+                                                    </button>
+                                                    <button
+                                                        onClick={() => removeQuestion(qIndex)}
+                                                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                                    >
+                                                        Remove Question
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <button
+                                                    onClick={() => {
+                                                        const updatedQuestions = [...questions];
+                                                        updatedQuestions[qIndex].answers.push({ text: '', score: 0 });
+                                                        setQuestions(updatedQuestions);
+                                                    }}
+                                                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 col-span-2"
+                                                >
+                                                    Add Answer
+                                                </button>
+                                            )}
+                                        </div>
                                     )}
                                 </div>
 

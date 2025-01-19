@@ -93,7 +93,7 @@ function App() {
       </Routes>
 
       {/* Если пользователь "реальный" (не mock), выводим debug-информацию */}
-      {tgUser && tgUser.id !== 111 && (
+      {/* {tgUser && tgUser.id !== 111 && (
         <div
           style={{
             padding: '20px',
@@ -106,7 +106,7 @@ function App() {
         >
           <p>tgUser: {JSON.stringify(tgUser)}</p>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
