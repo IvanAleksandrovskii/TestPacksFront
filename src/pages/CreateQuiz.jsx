@@ -15,11 +15,11 @@ const CreateQuiz = ({ tgUser }) => {
                 ...formData,
                 creator_id: parseInt(tgUser?.id)
             });
-            alert(`Test created with ID: ${response.id}`);
+            // alert(`Test created with ID: ${response.id}`);
             navigate("/");
         } catch (error) {
             console.error('Error creating test:', error);
-            alert('Failed to create test. Check the console for details.');
+            alert('Failed to create test. An error occurred. Please try again later.');
         }
     };
 
