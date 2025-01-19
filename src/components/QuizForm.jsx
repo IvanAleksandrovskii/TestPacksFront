@@ -140,6 +140,7 @@ const QuizForm = ({
                         onChange={(e) => setName(e.target.value)}
                         onBlur={() => setTouched({ ...touched, name: true })}
                         className={`w-full p-2 border rounded ${touched.name && errors.name ? 'border-red-500' : 'border-gray-300'}`}
+                        placeholder="Enter your test name"
                     />
                     <ErrorMessage message={touched.name && errors.name} />
                 </div>
@@ -152,6 +153,7 @@ const QuizForm = ({
                         onChange={(e) => setDescription(e.target.value)}
                         onBlur={() => setTouched({ ...touched, description: true })}
                         className={`w-full p-2 border rounded ${touched.description && errors.description ? 'border-red-500' : 'border-gray-300'}`}
+                        placeholder="Enter your test description"
                     />
                     <ErrorMessage message={touched.description && errors.description} />
                 </div>
@@ -183,8 +185,7 @@ const QuizForm = ({
                             <div className="space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Question {qIndex + 1}:</label>
-                                    <input
-                                        type="text"
+                                    <textarea
                                         style={{ color: 'black' }}
                                         value={question.question_text}
                                         onChange={(e) => {
@@ -200,6 +201,8 @@ const QuizForm = ({
                                             setTouched(newTouched);
                                         }}
                                         className="w-full p-2 border rounded"
+                                        rows={3} // Задаем количество строк
+                                        placeholder="Enter your question text"
                                     />
                                     <ErrorMessage
                                         message={touched.questions?.[qIndex]?.question_text && errors.questions?.[qIndex]?.question_text}
