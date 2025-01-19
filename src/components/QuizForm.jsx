@@ -211,14 +211,14 @@ const QuizForm = ({
                                         <label className="block text-sm font-medium">Answers with scores:</label>
                                         {question.answers.length === 0 && (
                                             <span className="text-sm text-gray-600 italic">
-                                                This will be a free form answer question
+                                                This will be a free answer type question
                                             </span>
                                         )}
                                     </div>
                                     {question.answers.map((answer, aIndex) => (
                                         <div 
                                             key={aIndex} 
-                                            className="flex flex-wrap items-center gap-2 mt-2 w-full"
+                                            className="flex flex-wrap items-center gap-2 mt-2"
                                         >
                                             <input
                                                 type="text"
@@ -229,7 +229,7 @@ const QuizForm = ({
                                                     updated[qIndex].answers[aIndex].text = e.target.value;
                                                     setQuestions(updated);
                                                 }}
-                                                className="flex-1 p-2 border rounded"
+                                                className="flex-1 p-2 border rounded min-w-[200px]"
                                                 placeholder="Answer text"
                                             />
                                             <input

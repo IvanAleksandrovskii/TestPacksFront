@@ -15,7 +15,7 @@ const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
     >
         <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">
             <h2 className="text-lg font-semibold mb-4">Are you sure you want to delete this test?</h2>
-            <div className="flex justify-around mt-4">
+            <div className="flex justify-around mt-4 grid grid-cols-2 gap-2">
                 <button
                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                     onClick={onConfirm}
@@ -103,21 +103,21 @@ const TestList = ({ tgUser }) => {
                 {tests.map((test) => (
                     <li
                         key={test.id}
-                        className="flex justify-between items-center p-4 border rounded shadow-sm bg-white"
+                        className="flex flex-col p-4 border rounded shadow-sm bg-white"
                     >
-                        <span className="text-lg font-medium" style={{color: "black"}}>{test.name}</span>
-                        <div className="flex space-x-2">
-                            <button
-                                onClick={() => navigate(`/edit/${test.id}`)}
-                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 w-20"
-                            >
-                                Edit
-                            </button>
+                        <span className="text-lg font-medium mb-3" style={{color: "black"}}>{test.name}</span>
+                        <div className="flex justify-end gap-1 mt-2 grid grid-cols-2 gap-2">
                             <button
                                 onClick={() => openModal(test.id)}
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 w-20"
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                             >
                                 Delete
+                            </button>
+                            <button
+                                onClick={() => navigate(`/edit/${test.id}`)}
+                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                            >
+                                Edit
                             </button>
                         </div>
                     </li>
