@@ -92,10 +92,9 @@ const TestList = ({ tgUser }) => {
     const isLimitReached = tests.length >= MAX_TESTS;
 
     return (
-        <div className="p-6 max-w-4xl mx-auto" style={{ color: 'black' }}>
+        <div className="p-6 max-w-4xl mx-auto">
             <h1
-                className="text-2xl font-semibold mb-6"
-                style={{ color: 'white', textAlign: 'center' }}
+                className="text-2xl font-bold mb-6 text-center"
             >
                 My Tests
             </h1>
@@ -106,7 +105,7 @@ const TestList = ({ tgUser }) => {
                         key={test.id}
                         className="flex justify-between items-center p-4 border rounded shadow-sm bg-white"
                     >
-                        <span className="text-lg font-medium">{test.name}</span>
+                        <span className="text-lg font-medium" style={{color: "black"}}>{test.name}</span>
                         <div className="flex space-x-2">
                             <button
                                 onClick={() => navigate(`/edit/${test.id}`)}
