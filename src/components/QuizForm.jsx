@@ -20,7 +20,7 @@ const QuizForm = ({
     const [touched, setTouched] = useState({});
     const [isInitialized, setIsInitialized] = useState(false);
 
-    // Update form only once when component mounts or when initial values change significantly
+    // Заполнить форму начальными значениями только один раз
     useEffect(() => {
         if (!isInitialized) {
             setName(initialName);
@@ -34,28 +34,38 @@ const QuizForm = ({
         }
     }, [initialName, initialDescription, initialAllowBack, initialQuestions, isInitialized]);
 
-    // Rest of your component code remains the same...
+    // Дополняем валидацию проверкой ответов
     const validate = () => {
         const newErrors = {};
 
+        // Проверка названия теста
         if (!name.trim()) {
             newErrors.name = 'Test name is required';
         }
 
+        // Проверка описания
         if (!description.trim()) {
             newErrors.description = 'Description is required';
         }
 
+        // Проверка вопросов
         const questionErrors = questions.map(question => {
             const qError = {};
 
+            // Обязательное поле «Question text»
             if (!question.question_text.trim()) {
                 qError.question_text = 'Question text is required';
+            }
+
+            // Если в каком-то ответе текст пустой — выводим ошибку
+            if (question.answers.some(ans => !ans.text.trim())) {
+                qError.answers = 'Answer text is required';
             }
 
             return Object.keys(qError).length > 0 ? qError : null;
         });
 
+        // Если хотя бы один вопрос вернул ошибки — сохраняем в newErrors
         if (questionErrors.some(e => e !== null)) {
             newErrors.questions = questionErrors;
         }
@@ -64,6 +74,7 @@ const QuizForm = ({
     };
 
     const handleSubmit = async () => {
+        // Ставим touched для всех полей, чтобы сразу отобразились ошибки
         const allTouched = {
             name: true,
             description: true,
@@ -198,15 +209,18 @@ const QuizForm = ({
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Answers:</label>
                                     {question.answers.map((answer, aIndex) => (
-                                        <div key={aIndex} className="flex space-x-2 mt-2">
+                                        <div 
+                                            key={aIndex} 
+                                            className="flex flex-wrap items-center gap-2 mt-2 w-full"
+                                        >
                                             <input
                                                 type="text"
                                                 style={{ color: 'black' }}
                                                 value={answer.text}
                                                 onChange={(e) => {
-                                                    const updatedQuestions = [...questions];
-                                                    updatedQuestions[qIndex].answers[aIndex].text = e.target.value;
-                                                    setQuestions(updatedQuestions);
+                                                    const updated = [...questions];
+                                                    updated[qIndex].answers[aIndex].text = e.target.value;
+                                                    setQuestions(updated);
                                                 }}
                                                 className="flex-1 p-2 border rounded"
                                                 placeholder="Answer text"
@@ -216,20 +230,19 @@ const QuizForm = ({
                                                 style={{ color: 'black' }}
                                                 value={answer.score}
                                                 onChange={(e) => {
-                                                    const updatedQuestions = [...questions];
-                                                    updatedQuestions[qIndex].answers[aIndex].score = e.target.value;
-                                                    setQuestions(updatedQuestions);
+                                                    const updated = [...questions];
+                                                    updated[qIndex].answers[aIndex].score = e.target.value;
+                                                    setQuestions(updated);
                                                 }}
                                                 className="w-20 p-2 border rounded"
                                                 placeholder="Score"
                                             />
                                             <button
                                                 onClick={() => {
-                                                    const updatedQuestions = [...questions];
-                                                    updatedQuestions[qIndex].answers = updatedQuestions[qIndex].answers.filter(
-                                                        (_, i) => i !== aIndex
-                                                    );
-                                                    setQuestions(updatedQuestions);
+                                                    const updated = [...questions];
+                                                    updated[qIndex].answers =
+                                                        updated[qIndex].answers.filter((_, i) => i !== aIndex);
+                                                    setQuestions(updated);
                                                 }}
                                                 className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                             >
@@ -237,6 +250,7 @@ const QuizForm = ({
                                             </button>
                                         </div>
                                     ))}
+                                    {/** Показ ошибки, если у каких-то ответов пустой текст */}
                                     {errors.questions?.[qIndex]?.answers && (
                                         <ErrorMessage message={errors.questions[qIndex].answers} />
                                     )}
