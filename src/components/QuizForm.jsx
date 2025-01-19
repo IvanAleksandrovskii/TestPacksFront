@@ -291,7 +291,7 @@ const QuizForm = ({
                                         </div>
                                     )}
                                     {questions.length > 1 && (
-                                    <div className='grid grid-cols-2 gap-2'>
+                                    <div className="grid grid-cols-2 gap-2">
                                         <button
                                             onClick={() => removeQuestion(qIndex)}
                                             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 col-span-2 mt-2"
@@ -309,13 +309,13 @@ const QuizForm = ({
                 <div className="mt-2 grid grid-cols-2 gap-2">
                     <button
                         onClick={addQuestion}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                     >
                         Add Question
                     </button>
                     <button
                         onClick={handleSubmit}
-                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
                         {buttonText}
                     </button>

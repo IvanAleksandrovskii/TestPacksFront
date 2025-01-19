@@ -109,13 +109,13 @@ const TestList = ({ tgUser }) => {
                         <div className="flex space-x-2">
                             <button
                                 onClick={() => navigate(`/edit/${test.id}`)}
-                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 w-20"
                             >
                                 Edit
                             </button>
                             <button
                                 onClick={() => openModal(test.id)}
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 w-20"
                             >
                                 Delete
                             </button>
