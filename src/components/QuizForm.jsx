@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+import "../App.css";
+
+
 const QuizForm = ({
     initialName = '',
     initialDescription = '',
@@ -213,7 +216,7 @@ const QuizForm = ({
                                     <div className="flex justify-between items-center mb-2">
                                         {/* <label className="block text-sm font-medium">Answers with scores:</label> */}
                                         {question.answers.length === 0 && (
-                                            <span className="text-sm text-green-500 italic">
+                                            <span className="text-sm text-gray-600 underline">
                                                 Добавьте варианты ответов и баллы или оставьте открытый вопрос
                                             </span>
                                         )}
