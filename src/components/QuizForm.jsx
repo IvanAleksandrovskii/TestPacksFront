@@ -211,10 +211,10 @@ const QuizForm = ({
 
                                 <div>
                                     <div className="flex justify-between items-center mb-2">
-                                        <label className="block text-sm font-medium">Answers with scores:</label>
+                                        {/* <label className="block text-sm font-medium">Answers with scores:</label> */}
                                         {question.answers.length === 0 && (
-                                            <span className="text-sm text-gray-600 italic">
-                                                This will be a free answer type question
+                                            <span className="text-sm text-green-500 italic">
+                                                Добавьте варианты ответов и баллы или оставьте открытый вопрос
                                             </span>
                                         )}
                                     </div>
@@ -291,6 +291,13 @@ const QuizForm = ({
                                                     Add Answer
                                                 </button>
                                             )}
+                                            {/* <div className="flex justify-between items-center mb-2">
+                                                {question.answers.length === 0 && (
+                                                    <span className="text-sm text-purple-600 italic">
+                                                        Добавьте варианты ответов или оставьте открытый вопрос
+                                                    </span>
+                                                )}
+                                            </div> */}
                                         </div>
                                     )}
                                     {questions.length > 1 && (
