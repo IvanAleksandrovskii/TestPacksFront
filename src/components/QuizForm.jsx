@@ -135,7 +135,12 @@ const QuizForm = ({
         <div className="max-w-4xl mx-auto p-6">
             <div className="space-y-6">
                 <div>
-                    <label className="block text-sm font-medium mb-1">Test Name:</label>
+                <div className="flex justify-between items-center">
+                    <label className="block text-sm font-medium">Test Name:</label>
+                    <p className="text-gray-500 text-sm mb-1">
+                        (Отображается для пользователей)
+                    </p>
+                </div>
                     <input
                         type="text"
                         style={{ color: 'black' }}
@@ -149,7 +154,13 @@ const QuizForm = ({
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-1">Description:</label>
+                    {/* <label className="block text-sm font-medium mb-1">Description:</label> */}
+                <div className="flex justify-between items-center">
+                    <label className="block text-sm font-medium">Description:</label>
+                    <p className="text-gray-500 text-sm mb-1">
+                        (Отображается для пользователей)
+                    </p>
+                </div>
                     <textarea
                         value={description}
                         style={{ color: 'black' }}
