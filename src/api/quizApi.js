@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const BASE_URL = 'https://ndoh5u-ip-49-228-104-78.tunnelmole.net';  // process.env.REACT_APP_API_BASE_URL || 
+const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL || 'https://example.com';
 
 
 export const quizApi = {

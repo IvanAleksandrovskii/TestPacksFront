@@ -137,8 +137,8 @@ const QuizForm = ({
                 <div>
                 <div className="flex justify-between items-center">
                     <label className="block text-sm font-medium">Test Name:</label>
-                    <p className="text-gray-500 text-sm mb-1">
-                        (Отображается для пользователей)
+                    <p className="text-gray-500 text-[12px] mb-1">
+                        Отображается для пользователей
                     </p>
                 </div>
                     <input
@@ -157,8 +157,8 @@ const QuizForm = ({
                     {/* <label className="block text-sm font-medium mb-1">Description:</label> */}
                 <div className="flex justify-between items-center">
                     <label className="block text-sm font-medium">Description:</label>
-                    <p className="text-gray-500 text-sm mb-1">
-                        (Отображается для пользователей)
+                    <p className="text-gray-500 text-[12px] mb-1">
+                        Отображается для пользователей
                     </p>
                 </div>
                     <textarea
