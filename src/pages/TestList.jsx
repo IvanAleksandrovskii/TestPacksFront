@@ -5,7 +5,9 @@ import Modal from "react-modal";
 
 import { quizApi } from "../api/quizApi";
 
+
 Modal.setAppElement("#root");
+
 
 const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
     <Modal
@@ -84,7 +86,7 @@ const TestList = ({ tgUser }) => {
     };
 
     if (isLoading) {
-        return <div className="text-center text-gray-500">Loading...</div>;
+        return <div className="text-center text-gray-500 mt-12">Loading...</div>;
     }
 
     // Проверяем лимит: если уже есть 5 тестов, кнопка будет неактивной

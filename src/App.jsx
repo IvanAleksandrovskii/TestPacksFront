@@ -11,8 +11,12 @@ import CreateQuiz from './pages/CreateQuiz';
 import EditQuiz from './pages/EditQuiz';
 import TestList from './pages/TestList';
 
+import TestPacks from './pages/TestPacks';
+import Layout from './components/Layout';
+
+
 function App() {
-  const [tgInitData, setTgInitData] = useState(null);
+  // const [tgInitData, setTgInitData] = useState(null);
   const [tgUser, setTgUser] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -29,7 +33,7 @@ function App() {
 
       if (tg) {
         tg.ready();
-        setTgInitData(tg.initDataUnsafe);
+        // setTgInitData(tg.initDataUnsafe);
 
         // Определяем пользователя
         if (tg.initDataUnsafe?.user) {
@@ -87,26 +91,16 @@ function App() {
   return (
     <div style={{ padding: '20px', color: textColor }}>
       <Routes>
-        <Route path="/" element={<TestList tgUser={tgUser} />} />
+        <Route 
+            path="/" 
+            element={<Layout isDarkMode={isDarkMode} tgUser={tgUser} />}
+          >
+            <Route path="/" element={<TestList tgUser={tgUser} />} />
+            <Route path="/test_packs" element={<TestPacks />} />
+        </Route>
         <Route path="/create" element={<CreateQuiz tgUser={tgUser} />} />
         <Route path="/edit/:id" element={<EditQuiz creatorId={tgUser?.id} />} />
       </Routes>
-
-      {/* Если пользователь "реальный" (не mock), выводим debug-информацию */}
-      {/* {tgUser && tgUser.id !== 111 && (
-        <div
-          style={{
-            padding: '20px',
-            color: textColor,
-            backgroundColor: isDarkMode ? '#666666' : '#eeeeee',
-            textAlign: 'center',
-            margin: '0 auto',
-            wordWrap: 'break-word'
-          }}
-        >
-          <p>tgUser: {JSON.stringify(tgUser)}</p>
-        </div>
-      )} */}
     </div>
   );
 }
