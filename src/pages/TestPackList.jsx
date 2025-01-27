@@ -87,7 +87,7 @@ const TestPackList = ({ creatorId }) => {
     }
 
     // Лимит в 5 паков (как в custom test)
-    const MAX_PACKS = 5;
+    const MAX_PACKS = 10;  // TODO: Move to config
     const isLimitReached = packs.length >= MAX_PACKS;
 
     return (

@@ -91,7 +91,7 @@ const TestList = ({ tgUser }) => {
     }
 
     // Проверяем лимит: если уже есть 5 тестов, кнопка будет неактивной
-    const MAX_TESTS = 5;
+    const MAX_TESTS = 10;  // TODO: Move to config
     const isLimitReached = tests.length >= MAX_TESTS;
 
     return (
