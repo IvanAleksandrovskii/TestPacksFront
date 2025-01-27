@@ -91,10 +91,20 @@ function TestPackList({ creatorId }) {
         const link = `https://t.me/${BOT_USERNAME}?start=${packID}`;
         try {
             await navigator.clipboard.writeText(link);
-            alert("Link copied to clipboard!");
+            // alert("Link copied to clipboard!");
+            window.Telegram.WebApp.showPopup({
+                // title: "Мой заголовок",
+                message: "Ссылка скопирована в буфер обмена",
+                buttons: [{ type: 'close' }]
+            });
         } catch (err) {
             console.error("Failed to copy link:", err);
-            alert("Copy link failed. See console for details.");
+            // alert("Copy link failed. See console for details.");
+            window.Telegram.WebApp.showPopup({
+                // title: "Мой заголовок",
+                message: "Произошла ошибка при копировании ссылки",
+                buttons: [{ type: 'close' }]
+            });
         }
     };
 
@@ -165,8 +175,8 @@ function TestPackList({ creatorId }) {
                 onClick={() => !isLimitReached && navigate("/packs/create")}
                 disabled={isLimitReached}
                 className={`px-4 py-2 w-full rounded mb-4 mt-4 text-white ${isLimitReached
-                        ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"
-                        : "bg-blue-500 hover:bg-blue-600"
+                    ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"
+                    : "bg-blue-500 hover:bg-blue-600"
                     }`}
             >
                 {isLimitReached ? "To create a pack delete one" : "Create Test Pack"}
