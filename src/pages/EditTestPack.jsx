@@ -2,22 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { testPacksApi } from "../api/testPacksApi";
 
-const EditTestPack = () => {
+import { testPacksApi } from "../api/testPacksApi";
+import TestPackFormTwoGroups from "../components/TestPackFormTwoGroups";
+
+
+function EditTestPack() {
     const { packId } = useParams();
     const navigate = useNavigate();
 
     const [packName, setPackName] = useState("");
     const [psychoTests, setPsychoTests] = useState([]);
     const [customTests, setCustomTests] = useState([]);
-
-    // ID, которые уже выбраны
     const [psychoIdsSelected, setPsychoIdsSelected] = useState([]);
     const [customIdsSelected, setCustomIdsSelected] = useState([]);
-
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         loadData();
@@ -26,37 +25,27 @@ const EditTestPack = () => {
     async function loadData() {
         setLoading(true);
         try {
-            // 1) Получаем сам pack
+            // Загружаем сам пак
             const packData = await testPacksApi.getPack(packId);
             setPackName(packData.name);
-
-            // packData.tests -> [{id, name, description}...]
-            const existingPsycho = packData.tests.map((t) => t.id);
-            // packData.custom_tests -> [{id, name, description}...]
-            const existingCustom = packData.custom_tests.map((ct) => ct.id);
-
+            const existingPsycho = packData.tests.map(t => t.id);
+            const existingCustom = packData.custom_tests.map(ct => ct.id);
             setPsychoIdsSelected(existingPsycho);
             setCustomIdsSelected(existingCustom);
 
-            // 2) Загружаем доступные тесты
+            // Загружаем доступные тесты
             const psycho = await testPacksApi.getPsychologicalTests();
-            // Предположим, для custom:
-            // const custom = await testPacksApi.getCustomTests(someCreatorId);
-            // Если у нас хранится creator_id в packData, можно использовать packData.creator_id
             const custom = await testPacksApi.getCustomTests(packData.creator_id);
 
             setPsychoTests(psycho);
             setCustomTests(custom);
-
         } catch (err) {
-            console.error("Failed to load pack or tests", err);
-            setError("Could not load data. See console.");
+            console.error("Error loading pack data:", err);
         } finally {
             setLoading(false);
         }
     }
 
-    // Сохранение (редактирование)
     const handleUpdate = async ({ name, psychoIds, customIds }) => {
         try {
             const payload = {
@@ -65,23 +54,14 @@ const EditTestPack = () => {
                 custom_tests: customIds,
             };
             await testPacksApi.updatePack(packId, payload);
-            navigate("/packs");
+            navigate("/test_packs");
         } catch (err) {
-            console.error("Error updating test pack:", err);
+            console.error("Error updating pack:", err);
             alert("Error updating test pack. See console.");
         }
     };
 
-    const handleCancel = () => {
-        navigate("/packs");
-    };
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-    if (error) {
-        return <div style={{ color: "red" }}>{error}</div>;
-    }
+    if (loading) return <div className="text-center text-gray-500 mt-12">Loading...</div>;
 
     return (
         <TestPackFormTwoGroups
@@ -92,7 +72,6 @@ const EditTestPack = () => {
             psychoTests={psychoTests}
             customTests={customTests}
             onSubmitPack={handleUpdate}
-            onCancel={handleCancel}
         />
     );
 }
