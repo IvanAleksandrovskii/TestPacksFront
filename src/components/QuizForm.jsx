@@ -1,6 +1,10 @@
+// src/components/QuizForm.jsx
+
 import React, { useState, useEffect } from 'react';
+import { Trash2 } from 'lucide-react';
 
 import "../App.css";
+
 
 const QuizForm = ({
     initialName = '',
@@ -276,7 +280,7 @@ const QuizForm = ({
                                                 placeholder="Score"
                                                 title="Enter the score value"
                                             />
-                                            <button
+                                            {/* <button
                                                 onClick={() => {
                                                     const updated = [...questions];
                                                     updated[qIndex].answers =
@@ -286,7 +290,20 @@ const QuizForm = ({
                                                 className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                             >
                                                 Remove
+                                            </button> */}
+
+                                            <button
+                                            onClick={() => {
+                                                const updated = [...questions];
+                                                updated[qIndex].answers = updated[qIndex].answers.filter((_, i) => i !== aIndex);
+                                                setQuestions(updated);
+                                            }}
+                                            className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                            aria-label="Remove answer" // для доступности (screen readers)
+                                            >
+                                            <Trash2 size={16} />
                                             </button>
+
                                         </div>
                                     ))}
                                     {errors.questions?.[qIndex]?.answers && (
