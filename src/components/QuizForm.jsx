@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import "../App.css";
 
-
 const QuizForm = ({
     initialName = '',
     initialDescription = '',
     initialQuestions = [{
         question_text: '',
-        answers: []
+        answers: [],
+        isTestFormat: false
     }],
     onSubmit,
     allowBackOption = false,
@@ -23,52 +23,48 @@ const QuizForm = ({
     const [touched, setTouched] = useState({});
     const [isInitialized, setIsInitialized] = useState(false);
 
-    // Заполнить форму начальными значениями только один раз
     useEffect(() => {
         if (!isInitialized) {
             setName(initialName);
             setDescription(initialDescription);
             setAllowBack(initialAllowBack);
-            setQuestions(initialQuestions.length > 0 ? initialQuestions : [{
+            setQuestions(initialQuestions.length > 0 ? initialQuestions.map(q => ({
+                ...q,
+                isTestFormat: q.answers.length > 0
+            })) : [{
                 question_text: '',
-                answers: []
+                answers: [],
+                isTestFormat: false
             }]);
             setIsInitialized(true);
         }
     }, [initialName, initialDescription, initialAllowBack, initialQuestions, isInitialized]);
 
-    // Дополняем валидацию проверкой ответов
     const validate = () => {
         const newErrors = {};
 
-        // Проверка названия теста
         if (!name.trim()) {
             newErrors.name = 'Test name is required';
         }
 
-        // Проверка описания
         if (!description.trim()) {
             newErrors.description = 'Description is required';
         }
 
-        // Проверка вопросов
         const questionErrors = questions.map(question => {
             const qError = {};
 
-            // Обязательное поле «Question text»
             if (!question.question_text.trim()) {
                 qError.question_text = 'Question text is required';
             }
 
-            // Если в каком-то ответе текст пустой — выводим ошибку
-            if (question.answers.some(ans => !ans.text.trim())) {
+            if (question.isTestFormat && question.answers.some(ans => !ans.text.trim())) {
                 qError.answers = 'Answer text is required';
             }
 
             return Object.keys(qError).length > 0 ? qError : null;
         });
 
-        // Если хотя бы один вопрос вернул ошибки — сохраняем в newErrors
         if (questionErrors.some(e => e !== null)) {
             newErrors.questions = questionErrors;
         }
@@ -77,7 +73,6 @@ const QuizForm = ({
     };
 
     const handleSubmit = async () => {
-        // Ставим touched для всех полей, чтобы сразу отобразились ошибки
         const allTouched = {
             name: true,
             description: true,
@@ -107,12 +102,28 @@ const QuizForm = ({
         }
     };
 
+    const handleTestFormatChange = (qIndex, isChecked) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[qIndex].isTestFormat = isChecked;
+
+        if (isChecked) {
+            // Если включаем тестовый формат, добавляем один пустой ответ
+            updatedQuestions[qIndex].answers = [{ text: '', score: 0 }];
+        } else {
+            // Если выключаем, удаляем все ответы
+            updatedQuestions[qIndex].answers = [];
+        }
+
+        setQuestions(updatedQuestions);
+    };
+
     const addQuestion = () => {
         setQuestions([
             ...questions,
             {
                 question_text: '',
                 answers: [],
+                isTestFormat: false
             },
         ]);
     };
@@ -135,12 +146,12 @@ const QuizForm = ({
         <div className="max-w-4xl mx-auto p-6">
             <div className="space-y-6">
                 <div>
-                <div className="flex justify-between items-center">
-                    <label className="block text-sm font-medium">Test Name:</label>
-                    <p className="text-gray-500 text-[12px] mb-1">
-                        Отображается для пользователей
-                    </p>
-                </div>
+                    <div className="flex justify-between items-center">
+                        <label className="block text-sm font-medium">Test Name:</label>
+                        <p className="text-gray-500 text-[12px] mb-1">
+                            Отображается для пользователей
+                        </p>
+                    </div>
                     <input
                         type="text"
                         style={{ color: 'black' }}
@@ -154,13 +165,12 @@ const QuizForm = ({
                 </div>
 
                 <div>
-                    {/* <label className="block text-sm font-medium mb-1">Description:</label> */}
-                <div className="flex justify-between items-center">
-                    <label className="block text-sm font-medium">Description:</label>
-                    <p className="text-gray-500 text-[12px] mb-1">
-                        Отображается для пользователей
-                    </p>
-                </div>
+                    <div className="flex justify-between items-center">
+                        <label className="block text-sm font-medium">Description:</label>
+                        <p className="text-gray-500 text-[12px] mb-1">
+                            Отображается для пользователей
+                        </p>
+                    </div>
                     <textarea
                         value={description}
                         style={{ color: 'black' }}
@@ -194,7 +204,7 @@ const QuizForm = ({
                             className={`p-4 border rounded ${touched.questions?.[qIndex] && errors.questions?.[qIndex]
                                 ? 'border-red-500'
                                 : 'border-gray-300'
-                            }`}
+                                }`}
                         >
                             <div className="space-y-4">
                                 <div>
@@ -215,7 +225,7 @@ const QuizForm = ({
                                             setTouched(newTouched);
                                         }}
                                         className="w-full p-2 border rounded"
-                                        rows={3} // Задаем количество строк
+                                        rows={3}
                                         placeholder="Enter your question text"
                                     />
                                     <ErrorMessage
@@ -225,16 +235,20 @@ const QuizForm = ({
 
                                 <div>
                                     <div className="flex justify-between items-center mb-2">
-                                        {/* <label className="block text-sm font-medium">Answers with scores:</label> */}
-                                        {question.answers.length === 0 && (
-                                            <span className="text-m text-gray-600 mb-1 underline">
-                                                Добавьте варианты ответов и баллы или оставьте открытый вопрос
-                                            </span>
-                                        )}
+                                        <label className="flex items-center space-x-2">
+                                            <input
+                                                type="checkbox"
+                                                checked={question.isTestFormat}
+                                                onChange={(e) => handleTestFormatChange(qIndex, e.target.checked)}
+                                                className="rounded"
+                                            />
+                                            <span className="text-sm font-medium">Тестовый формат (добавить варианты ответов с баллами)</span>
+                                        </label>
                                     </div>
+
                                     {question.answers.map((answer, aIndex) => (
-                                        <div 
-                                            key={aIndex} 
+                                        <div
+                                            key={aIndex}
                                             className="flex flex-wrap items-center gap-2 mt-2"
                                         >
                                             <input
@@ -278,51 +292,29 @@ const QuizForm = ({
                                     {errors.questions?.[qIndex]?.answers && (
                                         <ErrorMessage message={errors.questions[qIndex].answers} />
                                     )}
-                                    {question.answers.length < 6 && (
+                                    {question.isTestFormat && question.answers.length < 6 && (
                                         <div className="mt-2 grid grid-cols-2 gap-2">
-                                            {question.answers.length > 0 ? (
-                                                <>
-                                                    <button
-                                                        onClick={() => {
-                                                            const updatedQuestions = [...questions];
-                                                            updatedQuestions[qIndex].answers.push({ text: '', score: 0 });
-                                                            setQuestions(updatedQuestions);
-                                                        }}
-                                                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 col-span-2"
-                                                    >
-                                                        Add Answer
-                                                    </button>
-                                                </>
-                                            ) : (
-                                                <button
-                                                    onClick={() => {
-                                                        const updatedQuestions = [...questions];
-                                                        updatedQuestions[qIndex].answers.push({ text: '', score: 0 });
-                                                        setQuestions(updatedQuestions);
-                                                    }}
-                                                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 col-span-2"
-                                                >
-                                                    Add Answer
-                                                </button>
-                                            )}
-                                            {/* <div className="flex justify-between items-center mb-2">
-                                                {question.answers.length === 0 && (
-                                                    <span className="text-sm text-purple-600 italic">
-                                                        Добавьте варианты ответов или оставьте открытый вопрос
-                                                    </span>
-                                                )}
-                                            </div> */}
+                                            <button
+                                                onClick={() => {
+                                                    const updatedQuestions = [...questions];
+                                                    updatedQuestions[qIndex].answers.push({ text: '', score: 0 });
+                                                    setQuestions(updatedQuestions);
+                                                }}
+                                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 col-span-2"
+                                            >
+                                                Add Answer
+                                            </button>
                                         </div>
                                     )}
                                     {questions.length > 1 && (
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button
-                                            onClick={() => removeQuestion(qIndex)}
-                                            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 col-span-2 mt-2"
-                                        >
-                                            Remove Question
-                                        </button>
-                                    </div>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <button
+                                                onClick={() => removeQuestion(qIndex)}
+                                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 col-span-2 mt-2"
+                                            >
+                                                Remove Question
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -348,6 +340,5 @@ const QuizForm = ({
         </div>
     );
 };
-
 
 export default QuizForm;
