@@ -1,5 +1,6 @@
 // src/pages/CreateQuiz.jsx
-import React, { useState, useEffect } from 'react';
+
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { quizApi } from '../api/quizApi';
