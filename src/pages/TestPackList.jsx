@@ -3,10 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
+import { Share2 } from "lucide-react";
 
 import { testPacksApi } from "../api/testPacksApi";
+import { BOT_USERNAME } from "../api/constants";
+
 
 Modal.setAppElement("#root");
+
 
 const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
     <Modal
@@ -82,6 +86,19 @@ const TestPackList = ({ creatorId }) => {
         }
     };
 
+    // Функция "share" - копирует ссылку в буфер
+    const handleShare = async (packID) => {
+        // Формируем ссылку с bot_username (BOT_USERNAME)
+        const link = `https://t.me/${BOT_USERNAME}?start=${packID}`;
+        try {
+            await navigator.clipboard.writeText(link);
+            alert("Link copied to clipboard!");
+        } catch (err) {
+            console.error("Failed to copy link:", err);
+            alert("Copy link failed. See console for details.");
+        }
+    };
+
     if (isLoading) {
         return <div className="text-center text-gray-500 mt-12">Loading...</div>;
     }
@@ -100,9 +117,20 @@ const TestPackList = ({ creatorId }) => {
                         key={pack.id}
                         className="flex flex-col p-4 border rounded shadow-sm bg-white"
                     >
-                        <span className="text-lg font-medium mb-3" style={{ color: "black" }}>
-                            {pack.name}
-                        </span>
+                        <div className="flex items-center justify-between">
+                            <span className="text-lg font-medium mb-3" style={{ color: "black" }}>
+                                {pack.name}
+                            </span>
+                            {/* Кнопка Share */}
+                            <button
+                                onClick={() => handleShare(pack.id)}
+                                className="px-2 py-1 border border-blue-500 text-blue-500 rounded-sm text-xs hover:bg-blue-500 hover:text-white flex items-center gap-1"
+                                title="Copy link to clipboard"
+                            >
+                                <Share2 size={14} />
+                                Share
+                            </button>
+                        </div>
                         <div className="flex justify-end gap-1 mt-2 grid grid-cols-2 gap-2">
                             <button
                                 onClick={() => openModal(pack.id)}
@@ -128,8 +156,8 @@ const TestPackList = ({ creatorId }) => {
                 onClick={() => !isLimitReached && navigate("/packs/create")}
                 disabled={isLimitReached}
                 className={`px-4 py-2 w-full rounded mb-4 mt-4 text-white ${isLimitReached
-                        ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"
-                        : "bg-blue-500 hover:bg-blue-600"
+                    ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"
+                    : "bg-blue-500 hover:bg-blue-600"
                     }`}
             >
                 {isLimitReached ? "To create a pack delete one" : "Create Test Pack"}

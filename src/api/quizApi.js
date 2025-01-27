@@ -2,8 +2,7 @@
 
 import axios from 'axios';
 
-
-const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL || 'https://example.com';
+import { BASE_URL } from "./constants";
 
 
 export const quizApi = {
