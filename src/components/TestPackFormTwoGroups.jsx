@@ -3,8 +3,12 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
-// Предполагается, что вы где-то (например, в index.js) вызываете:
-// Modal.setAppElement("#root");
+// Настройки для чекбоксов
+const checkboxStyle = {
+    accentColor: '#4CAF50', // Зеленый цвет для галочки
+    width: '16px',
+    height: '16px'
+};
 
 function TestPackFormTwoGroups({
     isEdit = false,
@@ -29,11 +33,11 @@ function TestPackFormTwoGroups({
     const [showModal, setShowModal] = useState(false);
     const [modalTest, setModalTest] = useState(null);
 
-    // --- Поля для отображения ошибок ---
+    // Поля для отображения ошибок
     const [nameError, setNameError] = useState("");
     const [testsError, setTestsError] = useState("");
 
-    // Выбор/отмена психологического теста
+    // Обработчики
     const togglePsychoTest = (testId) => {
         setSelectedPsycho((prev) => {
             const newSet = new Set(prev);
@@ -46,7 +50,6 @@ function TestPackFormTwoGroups({
         });
     };
 
-    // Выбор/отмена кастомного теста
     const toggleCustomTest = (testId) => {
         setSelectedCustom((prev) => {
             const newSet = new Set(prev);
@@ -59,43 +62,32 @@ function TestPackFormTwoGroups({
         });
     };
 
-    // Открыть модалку
     const openModal = (testObj) => {
         setModalTest(testObj);
         setShowModal(true);
     };
 
-    // Закрыть модалку
     const closeModal = () => {
         setModalTest(null);
         setShowModal(false);
     };
 
-    // Нажатие «Create Pack» / «Save Changes»
     const handleSubmit = () => {
-        // Сброс предыдущих ошибок
         setNameError("");
         setTestsError("");
 
         let hasError = false;
-
-        // Проверяем, что имя не пустое
         if (!packName.trim()) {
             setNameError("Pack name is required");
             hasError = true;
         }
-
-        // Проверяем, что выбран хотя бы 1 тест (психо + кастом)
         const totalSelected = selectedPsycho.size + selectedCustom.size;
         if (totalSelected === 0) {
             setTestsError("At least one test must be selected");
             hasError = true;
         }
-
-        // Если есть ошибки — не отправляем форму
         if (hasError) return;
 
-        // Вызываем колбэк «сохранения»
         onSubmitPack({
             name: packName.trim(),
             psychoIds: Array.from(selectedPsycho),
@@ -126,7 +118,7 @@ function TestPackFormTwoGroups({
                 )}
             </div>
 
-            {/* Блок «Psychological tests» */}
+            {/* Психологические тесты */}
             <div
                 className={`border rounded mb-4 ${testsError ? "border-red-500" : "border-gray-300"
                     }`}
@@ -153,11 +145,13 @@ function TestPackFormTwoGroups({
                                         type="checkbox"
                                         checked={selectedPsycho.has(test.id)}
                                         onChange={() => togglePsychoTest(test.id)}
+                                        style={checkboxStyle}
                                     />
                                     <span>{test.name}</span>
                                 </label>
+                                {/* КНОПКА-ИКОНКА 16x16 c «?» */}
                                 <button
-                                    className="text-blue-500 hover:text-blue-700 text-sm"
+                                    className="flex items-center justify-center w-4 h-4 border border-green-500 text-green-500 rounded-sm text-xs hover:bg-green-500 hover:text-white"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         openModal(test);
@@ -171,7 +165,7 @@ function TestPackFormTwoGroups({
                 )}
             </div>
 
-            {/* Блок «Custom Tests» */}
+            {/* Кастомные тесты */}
             <div
                 className={`border rounded mb-4 ${testsError ? "border-red-500" : "border-gray-300"
                     }`}
@@ -198,11 +192,13 @@ function TestPackFormTwoGroups({
                                         type="checkbox"
                                         checked={selectedCustom.has(test.id)}
                                         onChange={() => toggleCustomTest(test.id)}
+                                        style={checkboxStyle}
                                     />
                                     <span>{test.name}</span>
                                 </label>
+                                {/* КНОПКА-ИКОНКА 16x16 c «?» */}
                                 <button
-                                    className="text-blue-500 hover:text-blue-700 text-sm"
+                                    className="flex items-center justify-center w-4 h-4 border border-green-500 text-green-500 rounded-sm text-xs hover:bg-green-500 hover:text-white"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         openModal(test);
@@ -216,12 +212,10 @@ function TestPackFormTwoGroups({
                 )}
             </div>
 
-            {/* Текст ошибки для тестов (если хотите отдельно) */}
             {testsError && (
                 <p className="text-red-500 text-sm mb-2">{testsError}</p>
             )}
 
-            {/* Кнопки */}
             <div className="grid grid-cols-1 gap-1">
                 <button
                     onClick={handleSubmit}
@@ -231,7 +225,7 @@ function TestPackFormTwoGroups({
                 </button>
             </div>
 
-            {/* Модальное окно «?» для подробностей */}
+            {/* Модалка «?» для подробностей */}
             <Modal
                 isOpen={showModal}
                 onRequestClose={closeModal}
