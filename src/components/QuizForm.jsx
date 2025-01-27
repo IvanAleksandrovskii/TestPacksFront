@@ -264,10 +264,10 @@ const QuizForm = ({
                                                     updated[qIndex].answers[aIndex].text = e.target.value;
                                                     setQuestions(updated);
                                                 }}
-                                                className="flex-1 p-2 border rounded min-w-[200px]"
+                                                className="flex-1 p-2 border rounded min-w-[150px]"
                                                 placeholder="Answer text"
                                             />
-                                            <input
+                                            {/* <input
                                                 type="number"
                                                 style={{ color: 'black' }}
                                                 value={answer.score}
@@ -279,6 +279,22 @@ const QuizForm = ({
                                                 className="w-20 p-2 border rounded"
                                                 placeholder="Score"
                                                 title="Enter the score value"
+                                            /> */}
+                                            <input
+                                            type="number"
+                                            style={{ 
+                                                color: 'black',
+                                                width: '60px' // подбирайте подходящее значение
+                                            }}
+                                            value={answer.score}
+                                            onChange={(e) => {
+                                                const updated = [...questions];
+                                                updated[qIndex].answers[aIndex].score = e.target.value;
+                                                setQuestions(updated);
+                                            }}
+                                            className="p-2 border rounded"
+                                            placeholder="Sc" // короткий placeholder, напр. "Sc" вместо "Score"
+                                            title="Enter the score value"
                                             />
                                             {/* <button
                                                 onClick={() => {
