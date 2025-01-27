@@ -1,6 +1,6 @@
 // src/pages/CreateQuiz.jsx
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { quizApi } from '../api/quizApi';
@@ -9,6 +9,16 @@ import QuizForm from '../components/QuizForm';
 
 const CreateQuiz = ({ tgUser }) => {
     const navigate = useNavigate();
+
+    // Добавляем обработку кнопки назад
+    useEffect(() => {
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.BackButton.onClick(() => {
+                navigate('/');
+            });
+        }
+    }, [navigate]);
 
     const handleSubmit = async (formData) => {
         try {

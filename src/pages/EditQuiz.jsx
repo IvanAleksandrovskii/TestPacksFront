@@ -14,6 +14,16 @@ const EditQuiz = ({ creatorId }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Добавляем обработку кнопки назад
+    useEffect(() => {
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.BackButton.onClick(() => {
+                navigate('/');
+            });
+        }
+    }, [navigate]);
+
     useEffect(() => {
         const fetchTest = async () => {
             try {
