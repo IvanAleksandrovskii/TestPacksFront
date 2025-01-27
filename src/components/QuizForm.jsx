@@ -6,6 +6,14 @@ import { Trash2 } from 'lucide-react';
 import "../App.css";
 
 
+// Настройки для чекбоксов
+const checkboxStyle = {
+    accentColor: '#2600ff', // Синий цвет для галочки
+    width: '16px',
+    height: '16px'
+};
+
+
 const QuizForm = ({
     initialName = '',
     initialDescription = '',
@@ -194,6 +202,7 @@ const QuizForm = ({
                                 checked={allowBack}
                                 onChange={(e) => setAllowBack(e.target.checked)}
                                 className="rounded"
+                                style={checkboxStyle}
                             />
                             <span className="text-sm font-medium">Allow going back to previous questions</span>
                         </label>
@@ -245,6 +254,7 @@ const QuizForm = ({
                                                 checked={question.isTestFormat}
                                                 onChange={(e) => handleTestFormatChange(qIndex, e.target.checked)}
                                                 className="rounded"
+                                                style={checkboxStyle}
                                             />
                                             <span className="text-sm font-medium">Тестовый формат (добавить варианты ответов с баллами)</span>
                                         </label>
