@@ -308,17 +308,19 @@ const QuizForm = ({
                                                 Remove
                                             </button> */}
 
-                                            <button
-                                            onClick={() => {
-                                                const updated = [...questions];
-                                                updated[qIndex].answers = updated[qIndex].answers.filter((_, i) => i !== aIndex);
-                                                setQuestions(updated);
-                                            }}
-                                            className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                            aria-label="Remove answer" // для доступности (screen readers)
-                                            >
-                                            <Trash2 size={16} />
-                                            </button>
+                                            {!(question.isTestFormat && question.answers.length === 1) && (
+                                                <button
+                                                    onClick={() => {
+                                                        const updated = [...questions];
+                                                        updated[qIndex].answers = updated[qIndex].answers.filter((_, i) => i !== aIndex);
+                                                        setQuestions(updated);
+                                                    }}
+                                                    className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                                    aria-label="Remove answer"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            )}
 
                                         </div>
                                     ))}
