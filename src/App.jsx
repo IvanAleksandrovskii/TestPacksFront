@@ -100,10 +100,6 @@ function App() {
         <Route path="/create" element={<CreateQuiz tgUser={tgUser} />} />
         <Route path="/edit/:id" element={<EditQuiz creatorId={tgUser?.id} />} />
         <Route
-          path="/packs"
-          element={<TestPackList creatorId={tgUser?.id} />}
-        />
-        <Route
           path="/packs/create"
           element={
             <CreateTestPack

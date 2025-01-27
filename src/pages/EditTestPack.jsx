@@ -22,6 +22,16 @@ function EditTestPack() {
         loadData();
     }, [packId]);
 
+    // Добавляем обработку кнопки назад
+    useEffect(() => {
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.BackButton.onClick(() => {
+                navigate('/test_packs');
+            });
+        }
+    }, [navigate]);
+
     async function loadData() {
         setLoading(true);
         try {

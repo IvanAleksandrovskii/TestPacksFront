@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { testPacksApi } from "../api/testPacksApi";
 import TestPackFormTwoGroups from "../components/TestPackFormTwoGroups";
 
+
 function CreateTestPack({ creatorId, creatorUsername }) {
     const navigate = useNavigate();
     const { packId } = useParams();
@@ -16,6 +17,16 @@ function CreateTestPack({ creatorId, creatorUsername }) {
     useEffect(() => {
         loadTests();
     }, []);
+
+    // Добавляем обработку кнопки назад
+    useEffect(() => {
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.BackButton.onClick(() => {
+                navigate('/test_packs');
+            });
+        }
+    }, [navigate]);
 
     async function loadTests() {
         setLoading(true);
