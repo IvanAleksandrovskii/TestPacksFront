@@ -36,11 +36,12 @@ const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
     </Modal>
 );
 
-const TestList = ({ tgUser }) => {
+function TestList({ tgUser }) {
     const [tests, setTests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setModalOpen] = useState(false);
-    const [testToDelete, setTestToDelete] = useState(null); // ID теста для удаления
+    const [testToDelete, setTestToDelete] = useState(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -65,7 +66,6 @@ const TestList = ({ tgUser }) => {
     const handleDelete = async () => {
         if (!testToDelete) return;
         try {
-            // Предполагаем, что quizApi.deleteTest(testId, userId) удалит тест
             await quizApi.deleteTest(testToDelete, tgUser.id);
             setTests(tests.filter((test) => test.id !== testToDelete));
         } catch (error) {
@@ -90,17 +90,13 @@ const TestList = ({ tgUser }) => {
         return <div className="text-center text-gray-500 mt-12">Loading...</div>;
     }
 
-    // Проверяем лимит: если уже есть 5 тестов, кнопка будет неактивной
-    const MAX_TESTS = 10;  // TODO: Move to config
+    // Проверяем лимит
+    const MAX_TESTS = 10;
     const isLimitReached = tests.length >= MAX_TESTS;
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
-            <h1
-                className="text-2xl font-bold mb-6 text-center"
-            >
-                My Tests
-            </h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">My Tests</h1>
 
             <ul className="space-y-4">
                 {tests.map((test) => (
@@ -108,7 +104,20 @@ const TestList = ({ tgUser }) => {
                         key={test.id}
                         className="flex flex-col p-4 border rounded shadow-sm bg-white"
                     >
-                        <span className="text-lg font-medium mb-3" style={{color: "black"}}>{test.name}</span>
+                        {/* Название теста: с автопереносом (hyphens) */}
+                        <span
+                            className="text-lg font-medium mb-3 break-words"
+                            style={{
+                                color: "black",
+                                whiteSpace: "pre-wrap",
+                                wordBreak: "break-word",
+                                overflowWrap: "break-word",
+                                hyphens: "auto", // позв. браузеру вставлять дефисы при переносе
+                            }}
+                        >
+                            {test.name}
+                        </span>
+
                         <div className="flex justify-end gap-1 mt-2 grid grid-cols-2 gap-2">
                             <button
                                 onClick={() => openModal(test.id)}
@@ -130,7 +139,7 @@ const TestList = ({ tgUser }) => {
                 )}
             </ul>
 
-            {/* Кнопка "Create Test" или "To create a test delete one" */}
+            {/* Кнопка "Create Test" */}
             <button
                 onClick={() => !isLimitReached && navigate("/create")}
                 disabled={isLimitReached}
@@ -142,6 +151,7 @@ const TestList = ({ tgUser }) => {
                 {isLimitReached ? "To create a test delete one" : "Create Test"}
             </button>
 
+            {/* Окно подтверждения удаления */}
             <DeleteConfirmation
                 isOpen={isModalOpen}
                 onConfirm={handleDelete}
@@ -149,6 +159,6 @@ const TestList = ({ tgUser }) => {
             />
         </div>
     );
-};
+}
 
 export default TestList;
