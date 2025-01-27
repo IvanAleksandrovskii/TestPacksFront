@@ -116,7 +116,7 @@ function TestPackList({ creatorId }) {
     const isLimitReached = packs.length >= MAX_PACKS;
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
+        <div className="p-2 w-full">
             <h1 className="text-2xl font-bold mb-6 text-center">My Test Packs</h1>
 
             <ul className="space-y-4">
@@ -174,7 +174,7 @@ function TestPackList({ creatorId }) {
             <button
                 onClick={() => !isLimitReached && navigate("/packs/create")}
                 disabled={isLimitReached}
-                className={`px-4 py-2 w-full rounded mb-4 mt-4 text-white ${isLimitReached
+                className={`px-4 py-2 w-full rounded mb-8 mt-4 text-white ${isLimitReached
                     ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"
                     : "bg-blue-500 hover:bg-blue-600"
                     }`}
