@@ -42,4 +42,13 @@ export const testPacksApi = {
         const response = await axios.get(`${BASE_URL}/api/psychological-tests/`);
         return response.data; // ожидаем массив TestOut
     },
+
+    // Добавляем метод getCustomTests:  // TODO: Doublecheck
+    async getCustomTests(creatorId) {
+        // Предположим, у вас на бэкенде есть эндпоинт:
+        //   GET /api/custom_tests/{creatorId}
+        // который возвращает список кастомных тестов конкретного пользователя
+        const response = await axios.get(`${BASE_URL}/api/custom_tests/${creatorId}`);
+        return response.data;
+    },
 };
