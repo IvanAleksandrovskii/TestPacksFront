@@ -9,8 +9,8 @@ import "../App.css";
 // Настройки для чекбоксов
 const checkboxStyle = {
     accentColor: '#2600ff', // Синий цвет для галочки
-    width: '16px',
-    height: '16px'
+    width: '28px',
+    height: '28px'
 };
 
 
@@ -194,21 +194,6 @@ const QuizForm = ({
                     <ErrorMessage message={touched.description && errors.description} />
                 </div>
 
-                {allowBackOption && (
-                    <div>
-                        <label className="flex items-center space-x-2">
-                            <input
-                                type="checkbox"
-                                checked={allowBack}
-                                onChange={(e) => setAllowBack(e.target.checked)}
-                                className="rounded"
-                                style={checkboxStyle}
-                            />
-                            <span className="text-sm font-medium">Allow going back to previous questions</span>
-                        </label>
-                    </div>
-                )}
-
                 <div className="space-y-6">
                     <h2 className="text-xl font-semibold">Questions</h2>
                     {questions.map((question, qIndex) => (
@@ -256,9 +241,29 @@ const QuizForm = ({
                                                 className="rounded"
                                                 style={checkboxStyle}
                                             />
-                                            <span className="text-sm font-medium">Тестовый формат (добавить варианты ответов с баллами)</span>
+                                            <span className="text-sm font-medium">Добавить варианты ответов с баллами</span>
                                         </label>
                                     </div>
+
+                                    {questions.length <= 1 && question.isTestFormat && (
+                                        <div className="text-sm text-gray-600 mt-6 mb-6">
+                                            <p>
+                                                В одном тесте можно создавать разные типы вопросов и ответов. При добавлении вариантов ответов, 
+                                                итоговый балл считается как сумма всех баллов, набранных при прохождении теста. 
+                                                Если подсчет баллов не нужен, оставьте 0.
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {questions.length <= 1 && !question.isTestFormat && (
+                                        <div className="text-sm text-gray-600 mt-6 mb-6">
+                                            <p>
+                                                Если вопрос открытый (без добавления ответов), 
+                                                пользователь отвечает чат-боту в свободной форме. 
+                                                Такие ответы не оцениваются и не включаются в итоговый подсчет баллов.
+                                            </p>
+                                        </div>
+                                    )}
 
                                     {question.answers.map((answer, aIndex) => (
                                         <div
@@ -366,22 +371,36 @@ const QuizForm = ({
                         </div>
                     ))}
                 </div>
-
+                {allowBackOption && (
+                    <div>
+                        <label className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                checked={allowBack}
+                                onChange={(e) => setAllowBack(e.target.checked)}
+                                className="rounded"
+                                style={checkboxStyle}
+                            />
+                            <span className="text-sm font-medium">Разрешить пользователю возврат к предыдущему вопросу</span>
+                        </label>
+                    </div>
+                )}  
                 <div className="mt-2 grid grid-cols-2 gap-2">
-                    <button
-                        onClick={addQuestion}
-                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                    >
-                        Add Question
-                    </button>
                     <button
                         onClick={handleSubmit}
                         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
                         {buttonText}
                     </button>
+                    <button
+                        onClick={addQuestion}
+                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                    >
+                        Добавить вопрос
+                    </button>
                 </div>
             </div>
+
         </div>
     );
 };

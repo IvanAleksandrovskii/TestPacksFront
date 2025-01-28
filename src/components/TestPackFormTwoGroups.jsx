@@ -6,9 +6,12 @@ import Modal from "react-modal";
 // Настройки для чекбоксов
 const checkboxStyle = {
     accentColor: '#4CAF50', // Зеленый цвет для галочки
-    width: '16px',
-    height: '16px'
+    width: '28px',
+    height: '28px'
 };
+
+// Настройки для кнопок с описанием теста
+const questionButtonStyle = "flex items-center justify-center w-7 h-7 border border-green-500 text-green-500 rounded-sm text-sm hover:bg-green-500 hover:text-white";
 
 function TestPackFormTwoGroups({
     isEdit = false,
@@ -95,6 +98,45 @@ function TestPackFormTwoGroups({
         });
     };
 
+    const TestItem = ({ test, isChecked, onToggle, onOpenModal }) => (
+        <div className="flex items-center justify-between mb-1 bg-white min-h-[48px] py-2">
+            <label className="flex items-center space-x-2 flex-1">
+                <div className="flex-shrink-0">
+                    <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => onToggle(test.id)}
+                        style={checkboxStyle}
+                    />
+                </div>
+                <span className="flex-1" style={{ 
+                    color: "black", 
+                    whiteSpace: "pre-wrap", 
+                    wordBreak: "break-word", 
+                    overflowWrap: "break-word", 
+                    hyphens: "auto",
+                    minHeight: "28px",
+                    display: "flex",
+                    alignItems: "center"
+                }}>
+                    {test.name}
+                </span>
+            </label>
+            <div className="flex-shrink-0 ml-2">
+                <button
+                    className={questionButtonStyle}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onOpenModal(test);
+                    }}
+                    style={{ minWidth: "32px" }}
+                >
+                    ?
+                </button>
+            </div>
+        </div>
+    );
+
     return (
         <div className="p-6 max-w-4xl mx-auto">
             <h2 className="text-xl font-bold mb-4">
@@ -119,94 +161,56 @@ function TestPackFormTwoGroups({
             </div>
 
             {/* Психологические тесты */}
-            <div
-                className={`border rounded mb-4 ${testsError ? "border-red-500" : "border-gray-300"
-                    }`}
-            >
+            <div className={`border rounded mb-4 ${testsError ? "border-red-500" : "border-gray-300"}`}>
                 <div
-                    className="p-2 bg-gray-500 rounded flex justify-between items-center cursor-pointer"
+                    className="p-2 bg-white rounded flex justify-between items-center cursor-pointer"
+                    style={{ border: "1px solid rgb(0, 0, 0)" }}
                     onClick={() => setPsychoExpanded(!psychoExpanded)}
                 >
-                    <span className="font-semibold text-white">Psychological Tests</span>
-                    <span className="text-white">{psychoExpanded ? "▲" : "▼"}</span>
+                    <span className="font-semibold text-black">Psychological Tests</span>
+                    <span className="text-black">{psychoExpanded ? "▲" : "▼"}</span>
                 </div>
                 {psychoExpanded && (
-                    <div className="p-2">
+                    <div className="p-2 bg-white">
                         {psychoTests.length === 0 && (
                             <p className="text-gray-500">No tests</p>
                         )}
                         {psychoTests.map((test) => (
-                            <div
+                            <TestItem
                                 key={test.id}
-                                className="flex items-center justify-between mb-1"
-                            >
-                                <label className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedPsycho.has(test.id)}
-                                        onChange={() => togglePsychoTest(test.id)}
-                                        style={checkboxStyle}
-                                    />
-                                    <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", overflowWrap: "break-word", hyphens: "auto", }}>{test.name}</span>
-                                </label>
-                                {/* КНОПКА-ИКОНКА 16x16 c «?» */}
-                                <button
-                                    className="flex items-center justify-center w-4 h-4 border border-green-500 text-green-500 rounded-sm text-xs hover:bg-green-500 hover:text-white"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        openModal(test);
-                                    }}
-                                >
-                                    ?
-                                </button>
-                            </div>
+                                test={test}
+                                isChecked={selectedPsycho.has(test.id)}
+                                onToggle={togglePsychoTest}
+                                onOpenModal={openModal}
+                            />
                         ))}
                     </div>
                 )}
             </div>
 
             {/* Кастомные тесты */}
-            <div
-                className={`border rounded mb-4 ${testsError ? "border-red-500" : "border-gray-300"
-                    }`}
-            >
+            <div className={`border rounded mb-4 ${testsError ? "border-red-500" : "border-gray-300"}`}>
                 <div
-                    className="p-2 bg-gray-500 rounded flex justify-between items-center cursor-pointer"
+                    className="p-2 bg-white rounded flex justify-between items-center cursor-pointer"
+                    style={{ border: "1px solid rgb(0, 0, 0)" }}
                     onClick={() => setCustomExpanded(!customExpanded)}
                 >
-                    <span className="font-semibold text-white">Custom Tests</span>
-                    <span className="text-white">{customExpanded ? "▲" : "▼"}</span>
+                    <span className="font-semibold text-black">Custom Tests</span>
+                    <span className="text-black">{customExpanded ? "▲" : "▼"}</span>
                 </div>
                 {customExpanded && (
-                    <div className="p-2">
+                    <div className="p-2 bg-white">
                         {customTests.length === 0 && (
                             <p className="text-gray-500">No tests</p>
                         )}
                         {customTests.map((test) => (
-                            <div
+                            <TestItem
                                 key={test.id}
-                                className="flex items-center justify-between mb-1"
-                            >
-                                <label className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedCustom.has(test.id)}
-                                        onChange={() => toggleCustomTest(test.id)}
-                                        style={checkboxStyle}
-                                    />
-                                    <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", overflowWrap: "break-word", hyphens: "auto", }}>{test.name}</span>
-                                </label>
-                                {/* КНОПКА-ИКОНКА 16x16 c «?» */}
-                                <button
-                                    className="flex items-center justify-center w-4 h-4 border border-green-500 text-green-500 rounded-sm text-xs hover:bg-green-500 hover:text-white"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        openModal(test);
-                                    }}
-                                >
-                                    ?
-                                </button>
-                            </div>
+                                test={test}
+                                isChecked={selectedCustom.has(test.id)}
+                                onToggle={toggleCustomTest}
+                                onOpenModal={openModal}
+                            />
                         ))}
                     </div>
                 )}

@@ -5,41 +5,36 @@ import React from "react";
 
 function Home() {
     return (
-        <div className="p-6 max-w-3xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6 text-center">
-                Добро пожаловать в панель управления тестами
-            </h1>
-
-            <div className="mb-6 text-lg leading-relaxed">
-                <p className="mb-4">
-                    Здесь вы можете <strong>создавать и редактировать наборы тестов</strong> для похождения в Telegram,
-                    а также <strong>создавать свои собственные тесты</strong>.
-                </p>
-
-                <h2 className="text-xl font-semibold mb-2">Наборы тестов</h2>
-                <p className="mb-4">
-                    Если вы хотите <strong>поделиться</strong> тестами,
-                    объедините их в «Наборы»:
-                    зайдите в раздел <strong>«Наборы»</strong> и нажмите 
-                    <strong> «Create Test Pack»</strong>. Сформированный набор можно будет
-                    легко отправить пользователям по одной ссылке.
-                </p>
-
-                <h2 className="text-xl font-semibold mb-2">Создание тестов</h2>
-                <p className="mb-4">
-                    Чтобы создать собственный тест, перейдите в раздел <strong>«Тесты»</strong> и
-                    нажмите на кнопку <strong>«Create Test»</strong>.
-                    <br />
-                    <strong>При добавлении вопросов можно выбрать как открытый формат (свободный ответ),
-                    так и формат теста (с вариантами ответов и баллами за них)</strong>. Это
-                    позволяет автоматически подсчитывать суммарный результат прохождения.
-                </p>
-
-                <p className="mb-4">
-                    <em>Приятного использования!</em>
-                </p>
-            </div>
+    <div className="max-w-5xl mx-auto"> {/* Увеличили max-w-4xl до max-w-5xl */}
+        <h1 className="text-3xl font-bold mb-6 text-center">
+            Добро пожаловать в панель управления тестами
+        </h1>
+        <div className="mb-6 text-lg leading-relaxed">
+            <p>
+                Вы можете <strong>создавать и редактировать собственные наборы тестов</strong> для чат-бота в Telegram,
+                а также создавать <strong>свои тесты</strong>.
+            </p>
+            <br />
+            <h2 className="text-xl font-semibold mb-2">Наборы тестов</h2>
+            <p>
+                Если вы хотите поделиться тестами, объедините их в <strong>«Наборы»</strong>: зайдите в раздел
+                <strong>«Наборы»</strong> и нажмите <strong>«Create Test Pack»</strong>.
+                Сформированный набор можно отправить пользователю по ссылке через <strong>«Share»</strong>.
+            </p>
+            <br />
+            <h2 className="text-xl font-semibold mb-2">Создание тестов</h2>
+            <p>Чтобы создать свой тест, перейдите в раздел <strong>«Тесты»</strong> и нажмите на кнопку <strong>«Create Test»</strong>.</p>
+            <br />
+            <p>
+                Можно добавлять как открытые вопросы (со свободным ответом чат-боту), так и закрытые (с вариантами ответов и баллами за них или без баллов,
+                если подсчет не требуется).
+            </p>
+            <br />
+            <p className="mb-12">
+                <strong><em>Приятного использования!</em></strong>
+            </p>
         </div>
+    </div>
     );
 }
 

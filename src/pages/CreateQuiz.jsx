@@ -40,7 +40,7 @@ const CreateQuiz = ({ tgUser }) => {
             <QuizForm
                 onSubmit={handleSubmit}
                 allowBackOption={true}
-                buttonText="Create Test"
+                buttonText="Создать тест"
             />
         </div>
     );

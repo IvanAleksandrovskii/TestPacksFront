@@ -76,7 +76,7 @@ const EditQuiz = ({ creatorId }) => {
                     }))
                 }))}
                 onSubmit={handleSubmit}
-                buttonText="Save Changes"
+                buttonText="Сохранить изменения"
                 allowBackOption={true}
             />
         </div>

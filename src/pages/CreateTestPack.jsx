@@ -1,7 +1,7 @@
 // src/pages/CreateTestPack.jsx
 
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";  // , useParams
 
 import { testPacksApi } from "../api/testPacksApi";
 import TestPackFormTwoGroups from "../components/TestPackFormTwoGroups";
@@ -9,7 +9,7 @@ import TestPackFormTwoGroups from "../components/TestPackFormTwoGroups";
 
 function CreateTestPack({ creatorId, creatorUsername }) {
     const navigate = useNavigate();
-    const { packId } = useParams();
+    // const { packId } = useParams();
     const [psychoTests, setPsychoTests] = useState([]);
     const [customTests, setCustomTests] = useState([]);
     const [loading, setLoading] = useState(true);
