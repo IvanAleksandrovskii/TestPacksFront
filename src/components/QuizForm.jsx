@@ -1,6 +1,6 @@
 // src/components/QuizForm.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef  } from 'react';
 import { Trash2 } from 'lucide-react';
 
 import "../App.css";
@@ -34,6 +34,22 @@ const QuizForm = ({
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [isInitialized, setIsInitialized] = useState(false);
+
+    // Рефы для скролла
+    const nameRef = useRef(null);
+    const descriptionRef = useRef(null);
+
+    // Для вопросов создадим массив refs
+    const [questionRefs, setQuestionRefs] = useState([]);
+
+    // При изменении кол-ва вопросов перестраиваем refs
+    useEffect(() => {
+        setQuestionRefs((prev) => {
+            // Создаем новый массив refs:
+            const newRefs = questions.map((_, i) => prev[i] || React.createRef());
+            return newRefs;
+        });
+    }, [questions]);
 
     useEffect(() => {
         if (!isInitialized) {
@@ -99,6 +115,7 @@ const QuizForm = ({
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
+            // Ошибок нет — вызываем onSubmit
             await onSubmit({
                 name,
                 description,
@@ -111,6 +128,26 @@ const QuizForm = ({
                     }))
                 }))
             });
+        } else {
+            // Если есть ошибки — определяем, что именно не валидно
+            if (validationErrors.name) {
+                // Скроллим к полю Name
+                nameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                return; // Выходим
+            }
+            if (validationErrors.description) {
+                // Скроллим к полю Description
+                descriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+            if (validationErrors.questions) {
+                // Находим индекс первого вопроса с ошибкой
+                const firstQErrorIndex = validationErrors.questions.findIndex(q => q != null);
+                if (firstQErrorIndex !== -1) {
+                    // Скроллим к этому вопросу
+                    questionRefs[firstQErrorIndex].current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            }
         }
     };
 
@@ -158,40 +195,45 @@ const QuizForm = ({
         <div className="max-w-4xl mx-auto p-6">
             <div className="space-y-6">
                 <div>
-                    <div className="flex justify-between items-center">
-                        <label className="block text-sm font-medium">Test Name:</label>
-                        <p className="text-gray-500 text-[12px] mb-1">
-                            Отображается для пользователей
-                        </p>
+                    <div ref={nameRef /* Привязываем ref */}>
+                        <div className="flex justify-between items-center">
+                            <label className="block text-sm font-medium">Test Name:</label>
+                            <p className="text-gray-500 text-[12px] mb-1">
+                                Отображается для пользователей
+                            </p>
+                        </div>
+                    
+                        <input
+                            type="text"
+                            style={{ color: 'black' }}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            onBlur={() => setTouched({ ...touched, name: true })}
+                            className={`w-full p-2 border rounded ${touched.name && errors.name ? 'border-red-500' : 'border-gray-300'}`}
+                            placeholder="Enter your test name"
+                        />
+                        <ErrorMessage message={touched.name && errors.name} />
                     </div>
-                    <input
-                        type="text"
-                        style={{ color: 'black' }}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        onBlur={() => setTouched({ ...touched, name: true })}
-                        className={`w-full p-2 border rounded ${touched.name && errors.name ? 'border-red-500' : 'border-gray-300'}`}
-                        placeholder="Enter your test name"
-                    />
-                    <ErrorMessage message={touched.name && errors.name} />
                 </div>
 
                 <div>
-                    <div className="flex justify-between items-center">
-                        <label className="block text-sm font-medium">Description:</label>
-                        <p className="text-gray-500 text-[12px] mb-1">
-                            Отображается для пользователей
-                        </p>
+                    <div ref={descriptionRef /* Привязываем ref */}>
+                        <div className="flex justify-between items-center">
+                            <label className="block text-sm font-medium">Description:</label>
+                            <p className="text-gray-500 text-[12px] mb-1">
+                                Отображается для пользователей
+                            </p>
+                        </div>
+                        <textarea
+                            value={description}
+                            style={{ color: 'black' }}
+                            onChange={(e) => setDescription(e.target.value)}
+                            onBlur={() => setTouched({ ...touched, description: true })}
+                            className={`w-full p-2 border rounded ${touched.description && errors.description ? 'border-red-500' : 'border-gray-300'}`}
+                            placeholder="Enter your test description"
+                        />
+                        <ErrorMessage message={touched.description && errors.description} />
                     </div>
-                    <textarea
-                        value={description}
-                        style={{ color: 'black' }}
-                        onChange={(e) => setDescription(e.target.value)}
-                        onBlur={() => setTouched({ ...touched, description: true })}
-                        className={`w-full p-2 border rounded ${touched.description && errors.description ? 'border-red-500' : 'border-gray-300'}`}
-                        placeholder="Enter your test description"
-                    />
-                    <ErrorMessage message={touched.description && errors.description} />
                 </div>
 
                 <div className="space-y-6">
@@ -199,10 +241,12 @@ const QuizForm = ({
                     {questions.map((question, qIndex) => (
                         <div
                             key={qIndex}
-                            className={`p-4 border rounded ${touched.questions?.[qIndex] && errors.questions?.[qIndex]
+                            ref={questionRefs[qIndex]}
+                            className={`p-4 border rounded ${
+                            touched.questions?.[qIndex] && errors.questions?.[qIndex]
                                 ? 'border-red-500'
                                 : 'border-gray-300'
-                                }`}
+                            }`}
                         >
                             <div className="space-y-4">
                                 <div>
@@ -249,8 +293,8 @@ const QuizForm = ({
                                         <div className="text-sm text-gray-600 mt-6 mb-6 underline">
                                             <em>
                                                 <p>
-                                                    В одном тесте можно создавать разные типы вопросов и ответов. При добавлении вариантов ответов, 
-                                                    итоговый балл считается как сумма всех баллов, набранных при прохождении теста. 
+                                                    В одном тесте можно создавать разные типы вопросов и ответов. При добавлении вариантов ответов,
+                                                    итоговый балл считается как сумма всех баллов, набранных при прохождении теста.
                                                     Если подсчет баллов не нужен, оставьте 0.
                                                 </p>
                                             </em>
@@ -287,20 +331,20 @@ const QuizForm = ({
                                                 placeholder="Answer text"
                                             />
                                             <input
-                                            type="number"
-                                            style={{ 
-                                                color: 'black',
-                                                width: '60px' // подбирайте подходящее значение
-                                            }}
-                                            value={answer.score}
-                                            onChange={(e) => {
-                                                const updated = [...questions];
-                                                updated[qIndex].answers[aIndex].score = e.target.value;
-                                                setQuestions(updated);
-                                            }}
-                                            className="p-2 border rounded"
-                                            placeholder="Sc" // короткий placeholder, напр. "Sc" вместо "Score"
-                                            title="Enter the score value"
+                                                type="number"
+                                                style={{
+                                                    color: 'black',
+                                                    width: '60px' // подбирайте подходящее значение
+                                                }}
+                                                value={answer.score}
+                                                onChange={(e) => {
+                                                    const updated = [...questions];
+                                                    updated[qIndex].answers[aIndex].score = e.target.value;
+                                                    setQuestions(updated);
+                                                }}
+                                                className="p-2 border rounded"
+                                                placeholder="Sc" // короткий placeholder, напр. "Sc" вместо "Score"
+                                                title="Enter the score value"
                                             />
                                             {!(question.isTestFormat && question.answers.length === 1) && (
                                                 <button
@@ -363,7 +407,7 @@ const QuizForm = ({
                             <span className="text-sm font-medium">Разрешить пользователю возврат к предыдущему вопросу</span>
                         </label>
                     </div>
-                )}  
+                )}
                 <div className="mt-2 grid grid-cols-2 gap-2">
                     <button
                         onClick={handleSubmit}
