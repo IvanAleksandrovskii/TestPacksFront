@@ -1,6 +1,6 @@
 // src/components/TestPackFormTwoGroups.jsx
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Modal from "react-modal";
 
 // Настройки для чекбоксов
@@ -39,6 +39,10 @@ function TestPackFormTwoGroups({
     // Поля для отображения ошибок
     const [nameError, setNameError] = useState("");
     const [testsError, setTestsError] = useState("");
+
+    // Рефы для скролла
+    const packNameRef = useRef(null);
+
 
     // Обработчики
     const togglePsychoTest = (testId) => {
@@ -83,6 +87,7 @@ function TestPackFormTwoGroups({
         if (!packName.trim()) {
             setNameError("Pack name is required");
             hasError = true;
+            packNameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
         }
         const totalSelected = selectedPsycho.size + selectedCustom.size;
         if (totalSelected === 0) {
@@ -144,13 +149,12 @@ function TestPackFormTwoGroups({
             </h2>
 
             {/* Поле имени */}
-            <div className="mb-4">
+            <div className="mb-4" ref={packNameRef}>
                 <label className="block mb-1 font-medium">Pack Name:</label>
                 <input
                     type="text"
                     style={{ color: "black" }}
-                    className={`w-full p-2 border rounded ${nameError ? "border-red-500" : "border-gray-300"
-                        }`}
+                    className={`w-full p-2 border rounded ${nameError ? "border-red-500" : "border-gray-300"}`}
                     placeholder="Enter pack name"
                     value={packName}
                     onChange={(e) => setPackName(e.target.value)}
