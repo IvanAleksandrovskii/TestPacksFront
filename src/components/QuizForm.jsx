@@ -246,22 +246,26 @@ const QuizForm = ({
                                     </div>
 
                                     {questions.length <= 1 && question.isTestFormat && (
-                                        <div className="text-sm text-gray-600 mt-6 mb-6">
-                                            <p>
-                                                В одном тесте можно создавать разные типы вопросов и ответов. При добавлении вариантов ответов, 
-                                                итоговый балл считается как сумма всех баллов, набранных при прохождении теста. 
-                                                Если подсчет баллов не нужен, оставьте 0.
-                                            </p>
+                                        <div className="text-sm text-gray-600 mt-6 mb-6 underline">
+                                            <em>
+                                                <p>
+                                                    В одном тесте можно создавать разные типы вопросов и ответов. При добавлении вариантов ответов, 
+                                                    итоговый балл считается как сумма всех баллов, набранных при прохождении теста. 
+                                                    Если подсчет баллов не нужен, оставьте 0.
+                                                </p>
+                                            </em>
                                         </div>
                                     )}
 
                                     {questions.length <= 1 && !question.isTestFormat && (
-                                        <div className="text-sm text-gray-600 mt-6 mb-6">
-                                            <p>
-                                                Если вопрос открытый (без добавления ответов), 
-                                                пользователь отвечает чат-боту в свободной форме. 
-                                                Такие ответы не оцениваются и не включаются в итоговый подсчет баллов.
-                                            </p>
+                                        <div className="text-sm text-gray-600 mt-6 mb-6 underline">
+                                            <em>
+                                                <p>
+                                                    Если вопрос открытый (без добавления ответов),
+                                                    пользователь отвечает чат-боту в свободной форме.
+                                                    Такие ответы не оцениваются и не включаются в итоговый подсчет баллов.
+                                                </p>
+                                            </em>
                                         </div>
                                     )}
 
@@ -282,19 +286,6 @@ const QuizForm = ({
                                                 className="flex-1 p-2 border rounded min-w-[150px]"
                                                 placeholder="Answer text"
                                             />
-                                            {/* <input
-                                                type="number"
-                                                style={{ color: 'black' }}
-                                                value={answer.score}
-                                                onChange={(e) => {
-                                                    const updated = [...questions];
-                                                    updated[qIndex].answers[aIndex].score = e.target.value;
-                                                    setQuestions(updated);
-                                                }}
-                                                className="w-20 p-2 border rounded"
-                                                placeholder="Score"
-                                                title="Enter the score value"
-                                            /> */}
                                             <input
                                             type="number"
                                             style={{ 
@@ -311,18 +302,6 @@ const QuizForm = ({
                                             placeholder="Sc" // короткий placeholder, напр. "Sc" вместо "Score"
                                             title="Enter the score value"
                                             />
-                                            {/* <button
-                                                onClick={() => {
-                                                    const updated = [...questions];
-                                                    updated[qIndex].answers =
-                                                        updated[qIndex].answers.filter((_, i) => i !== aIndex);
-                                                    setQuestions(updated);
-                                                }}
-                                                className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                            >
-                                                Remove
-                                            </button> */}
-
                                             {!(question.isTestFormat && question.answers.length === 1) && (
                                                 <button
                                                     onClick={() => {
