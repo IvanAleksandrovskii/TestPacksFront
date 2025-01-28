@@ -16,6 +16,9 @@ import Layout from './components/Layout';
 import CreateTestPack from './pages/CreateTestPack';
 import EditTestPack from './pages/EditTestPack';
 
+import Home from './pages/Home';
+
+
 function App() {
   const [tgUser, setTgUser] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -73,7 +76,7 @@ function App() {
     const tg = window?.Telegram?.WebApp;
     if (!tg) return;
 
-    if (location.pathname === '/' || location.pathname === '/test_packs') {
+    if (location.pathname === '/' || location.pathname === '/test_packs' || location.pathname === '/tests') {
       tg.BackButton.hide();
     } else {
       tg.BackButton.show();
@@ -94,7 +97,8 @@ function App() {
             path="/" 
             element={<Layout isDarkMode={isDarkMode} tgUser={tgUser} />}
           >
-            <Route path="/" element={<TestList tgUser={tgUser} />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/tests" element={<TestList tgUser={tgUser} />} />
             <Route path="/test_packs" element={<TestPackList creatorId={tgUser?.id} />} />
         </Route>
         <Route path="/create" element={<CreateQuiz tgUser={tgUser} />} />

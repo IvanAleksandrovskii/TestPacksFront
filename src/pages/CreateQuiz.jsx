@@ -15,7 +15,7 @@ const CreateQuiz = ({ tgUser }) => {
         const tg = window?.Telegram?.WebApp;
         if (tg) {
             tg.BackButton.onClick(() => {
-                navigate('/');
+                navigate('/tests');
             });
         }
     }, [navigate]);
