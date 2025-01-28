@@ -91,32 +91,35 @@ function App() {
   const textColor = isDarkMode ? 'white' : 'black';
 
   return (
-    <div style={{ padding: '20px', color: textColor }}>
-      <Routes>
-        <Route 
-            path="/" 
+    <div className="app-container" style={{ color: textColor }}>
+      <div className="content">
+        <Routes>
+          <Route
+            path="/"
             element={<Layout isDarkMode={isDarkMode} tgUser={tgUser} />}
           >
             <Route path="/" element={<Home />} />
             <Route path="/tests" element={<TestList tgUser={tgUser} />} />
             <Route path="/test_packs" element={<TestPackList creatorId={tgUser?.id} />} />
-        </Route>
-        <Route path="/create" element={<CreateQuiz tgUser={tgUser} />} />
-        <Route path="/edit/:id" element={<EditQuiz creatorId={tgUser?.id} />} />
-        <Route
-          path="/packs/create"
-          element={
-            <CreateTestPack
-              creatorId={tgUser?.id}
-              creatorUsername={tgUser?.username}
-            />
-          }
-        />
-        <Route
-          path="/packs/edit/:packId"
-          element={<EditTestPack />}
-        />
-      </Routes>
+          </Route>
+          <Route path="/create" element={<CreateQuiz tgUser={tgUser} />} />
+          <Route path="/edit/:id" element={<EditQuiz creatorId={tgUser?.id} />} />
+          <Route
+            path="/packs/create"
+            element={
+              <CreateTestPack
+                creatorId={tgUser?.id}
+                creatorUsername={tgUser?.username}
+              />
+            }
+          />
+          <Route
+            path="/packs/edit/:packId"
+            element={<EditTestPack />}
+            className="footer"
+          />
+        </Routes>
+      </div>
     </div>
   );
 }

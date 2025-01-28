@@ -3,3 +3,40 @@
     text-decoration-style: dashed;
     text-underline-offset: 6px;
 }
+
+/* Блокируем скролл на body */
+body {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* Основной контейнер для скролла */
+.app-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Контейнер для контента */
+.content {
+    padding: 20px;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+/* Если у вас есть футер */
+.footer {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 100;
+}
