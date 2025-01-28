@@ -42,7 +42,7 @@ const EditQuiz = ({ creatorId }) => {
     const handleSubmit = async (formData) => {
         try {
             await quizApi.updateTest(id, formData, creatorId);
-            navigate("/");
+            navigate("/tests");
         } catch (error) {
             console.error("Failed to update test", error);
             alert('Failed to update test. Please try again.');

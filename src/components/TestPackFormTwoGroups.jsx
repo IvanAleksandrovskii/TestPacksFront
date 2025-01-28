@@ -147,7 +147,7 @@ function TestPackFormTwoGroups({
                                         onChange={() => togglePsychoTest(test.id)}
                                         style={checkboxStyle}
                                     />
-                                    <span>{test.name}</span>
+                                    <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", overflowWrap: "break-word", hyphens: "auto", }}>{test.name}</span>
                                 </label>
                                 {/* КНОПКА-ИКОНКА 16x16 c «?» */}
                                 <button
@@ -194,7 +194,7 @@ function TestPackFormTwoGroups({
                                         onChange={() => toggleCustomTest(test.id)}
                                         style={checkboxStyle}
                                     />
-                                    <span>{test.name}</span>
+                                    <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", overflowWrap: "break-word", hyphens: "auto", }}>{test.name}</span>
                                 </label>
                                 {/* КНОПКА-ИКОНКА 16x16 c «?» */}
                                 <button
