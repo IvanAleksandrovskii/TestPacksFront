@@ -17,19 +17,26 @@ const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
         className="fixed inset-0 flex items-center justify-center z-50"
     >
         <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">
-            <h2 className="text-lg font-semibold mb-4">Are you sure you want to delete this test?</h2>
+            <h2 className="text-lg font-semibold mb-4">
+                Вы уверены, что хотите удалить тест? 
+                <strong>
+                    Этот тест будет удален из всех наборов, 
+                    а опустевшие полностью из них так же 
+                    будут удалены
+                </strong>
+            </h2>
             <div className="flex justify-around mt-4 grid grid-cols-2 gap-2">
                 <button
                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                     onClick={onConfirm}
                 >
-                    Yes
+                    Да
                 </button>
                 <button
                     className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
                     onClick={onCancel}
                 >
-                    No
+                    Нет
                 </button>
             </div>
         </div>
