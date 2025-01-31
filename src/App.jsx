@@ -80,7 +80,7 @@ function App() {
     const tg = window?.Telegram?.WebApp;
     if (!tg) return;
 
-    if (location.pathname === '/' || location.pathname === '/test_packs' || location.pathname === '/tests') {
+    if (location.pathname === '/' || location.pathname === '/test_packs' || location.pathname === '/tests' || location.pathname === '/test-completions') {
       tg.BackButton.hide();
     } else {
       tg.BackButton.show();

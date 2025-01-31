@@ -11,6 +11,16 @@ const TestPackCompletionDetails = () => {
     const navigate = useNavigate();
     const [completion, setCompletion] = useState(null);
 
+    // Добавляем обработку кнопки назад
+    useEffect(() => {
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.BackButton.onClick(() => {
+                navigate('/test-completions');
+            });
+        }
+    }, [navigate]);
+
     useEffect(() => {
         const fetchCompletion = async () => {
             try {
