@@ -18,6 +18,10 @@ import EditTestPack from './pages/EditTestPack';
 
 import Home from './pages/Home';
 
+import TestPackCompletionsPage from './pages/TestPackCompletionsPage';
+import TestPackCompletionDetails from './components/TestPackCompletionDetails';
+
+
 
 function App() {
   const [tgUser, setTgUser] = useState(null);
@@ -101,7 +105,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/tests" element={<TestList tgUser={tgUser} />} />
             <Route path="/test_packs" element={<TestPackList creatorId={tgUser?.id} />} />
+
+            <Route path="/test-completions" element={<TestPackCompletionsPage tgUser={tgUser} />} />
           </Route>
+          <Route path="/test-completions/:id" element={<TestPackCompletionDetails />} />
+
           <Route path="/create" element={<CreateQuiz tgUser={tgUser} />} />
           <Route path="/edit/:id" element={<EditQuiz creatorId={tgUser?.id} />} />
           <Route

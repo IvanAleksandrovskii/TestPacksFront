@@ -52,4 +52,17 @@ export const testPacksApi = {
         const response = await axios.get(`${BASE_URL}/api/custom_tests/${creatorId}`);
         return response.data;
     },
+
+    // Получаем список прохождений тестов пользователя
+    getTestCompletions: async (userId, status, page = 1, page_size = 20) => {
+        const response = await axios.get(`${BASE_URL}/api/test-completions`, {
+            params: {
+                user_id: userId,
+                status: status,
+                page: page,
+                page_size: page_size
+            }
+        });
+        return response.data;
+    },
 };
