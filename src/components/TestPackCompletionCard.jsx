@@ -79,23 +79,23 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
                         </h3>
                         <p
                             className={`px-2 py-1 rounded text-xs font-medium ${completion.status === "COMPLETED"
-                                    ? "bg-green-100 text-green-800"
-                                    : completion.status === "ABANDONED"
-                                        ? "bg-red-100 text-red-800"
-                                        : "bg-blue-100 text-blue-800"
+                                ? "bg-green-100 text-green-800"
+                                : completion.status === "ABANDONED"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-blue-100 text-blue-800"
                                 }`}
                         >
-                            {completion.status.toLowerCase()}
+                            {completion.status.toLowerCase().replace('_', ' ')}
                         </p>
                     </div>
 
                     <div className="flex justify-between items-center mt-2">
-                        {(firstName || lastName) && (
-                            <p className="text-gray-600 font-medium">
-                                {firstName} {lastName}
-                            </p>
-                        )}
-                        <div className="flex gap-2">
+
+                        <p className="text-gray-600 font-medium break-words" style={{ overflowWrap: 'anywhere' }}>
+                            {firstName} {lastName}
+                        </p>
+
+                        <div className="flex gap-2 grid grid-cols-1 min-w-max">
                             {username && (
                                 <button
                                     type="button"
