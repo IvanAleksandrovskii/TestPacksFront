@@ -7,6 +7,7 @@ import { Share2 } from "lucide-react";
 
 import { testPacksApi } from "../api/testPacksApi";
 import { BOT_USERNAME } from "../api/constants";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 Modal.setAppElement("#root");
@@ -109,7 +110,7 @@ function TestPackList({ creatorId }) {
     };
 
     if (isLoading) {
-        return <div className="text-center text-gray-500 mt-12">Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     const MAX_PACKS = 10;

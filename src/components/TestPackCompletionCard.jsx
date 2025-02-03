@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { MessageSquare, Phone } from "lucide-react";
+import { MessageSquare, Phone, Copy } from "lucide-react";
 
 const renderValue = (value) => {
     return value === "Не указано" ? "" : value;
@@ -68,69 +68,94 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
 
     return (
         <div
-            className="border rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer bg-white"
+            className="border rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer bg-white space-y-3"
             onClick={onClick}
         >
-            <div className="flex justify-between items-start mb-2">
-                <div>
-                    <h3 className="text-lg text-black">
-                        Пакет тестов:{" "}
-                        <span className="font-semibold">{completion.test_pack_name}</span>
-                    </h3>
-                    <p
-                        className={`text-sm ${completion.status === "COMPLETED"
-                                ? "text-green-600"
-                                : completion.status === "ABANDONED"
-                                    ? "text-red-600"
-                                    : "text-blue-600"
-                            }`}
-                    >
-                        Статус: {completion.status.toLowerCase()}
-                    </p>
+            <div className="flex justify-between items-start">
+                <div className="flex-grow">
+                    <div className="flex justify-between items-start">
+                        <h3 className="text-lg font-bold text-gray-800 truncate pr-2">
+                            {completion.test_pack_name}
+                        </h3>
+                        <p
+                            className={`px-2 py-1 rounded text-xs font-medium ${completion.status === "COMPLETED"
+                                    ? "bg-green-100 text-green-800"
+                                    : completion.status === "ABANDONED"
+                                        ? "bg-red-100 text-red-800"
+                                        : "bg-blue-100 text-blue-800"
+                                }`}
+                        >
+                            {completion.status.toLowerCase()}
+                        </p>
+                    </div>
+
+                    <div className="flex justify-between items-center mt-2">
+                        {(firstName || lastName) && (
+                            <p className="text-gray-600 font-medium">
+                                {firstName} {lastName}
+                            </p>
+                        )}
+                        <div className="flex gap-2">
+                            {username && (
+                                <button
+                                    type="button"
+                                    className="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-md transition-colors flex items-center gap-1 text-xs"
+                                    onClick={handleUsernameClick}
+                                >
+                                    <MessageSquare size={14} />
+                                    <span>@{username}</span>
+                                </button>
+                            )}
+                            {phone && (
+                                <button
+                                    type="button"
+                                    className="px-2 py-1 bg-green-50 hover:bg-green-100 text-green-600 rounded-md transition-colors flex items-center gap-1 text-xs"
+                                    onClick={handleCopyPhone}
+                                >
+                                    <Copy size={14} />
+                                    <span>{phone}</span>
+                                </button>
+                            )}
+                        </div>
+                    </div>
                 </div>
-                <span className="text-sm text-gray-500">
-                    {format(new Date(completion.updated_at), "dd MMM yyyy HH:mm", {
-                        locale: ru,
-                    })}
-                </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-3 text-sm">
-                <div>
-                    <p className="text-gray-600">
-                        Ожидает: {completion.pending_tests.length}
-                    </p>
-                    <p className="text-gray-600">
-                        Завершено: {completion.completed_tests.length}
-                    </p>
-                </div>
-                <div className="text-right">
-                    {(firstName || lastName) && (
-                        <p className="text-gray-500">
-                            {firstName} {lastName}
-                        </p>
-                    )}
-                    <div className="flex justify-end gap-2">
-                        {username && (
-                            <button
-                                type="button"
-                                className="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-md transition-colors duration-200 focus:outline-none flex items-center gap-1 text-xs"
-                                onClick={handleUsernameClick}
-                            >
-                                <MessageSquare size={14} />
-                                <span>@{username}</span>
-                            </button>
-                        )}
-                        {phone && (
-                            <button
-                                type="button"
-                                className="px-2 py-1 bg-green-50 hover:bg-green-100 text-green-600 rounded-md transition-colors duration-200 focus:outline-none flex items-center gap-1 text-xs"
-                                onClick={handleCopyPhone}
-                            >
-                                <Phone size={14} />
-                                <span>{phone}</span>
-                            </button>
-                        )}
+            <div className="gap-4 text-sm bg-gray-50 p-3 rounded-lg">
+                <div className="space-y-1">
+                    <div className="flex justify-between">
+                        <span className="text-gray-500">Пройдено</span>
+                        <span className="font-semibold">
+                            {completion.completion_percentage}%
+                        </span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-gray-500">Ожидает</span>
+                        <span className="font-semibold">
+                            {completion.pending_tests.length}
+                        </span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-gray-500">Завершено</span>
+                        <span className="font-semibold">
+                            {completion.completed_tests.length}
+                        </span>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-400 border-t pt-1 mt-1">
+                        <span>Обновлено:</span>
+                        <span>
+                            {format(new Date(completion.updated_at), "dd MMM yyyy HH:mm", {
+                                locale: ru,
+                            })}
+                        </span>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-400">
+                        <span>Начало:</span>
+                        <span>
+                            {format(new Date(completion.created_at), "dd MMM yyyy HH:mm", {
+                                locale: ru,
+                            })}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -145,7 +170,7 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
                 overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
                 shouldCloseOnOverlayClick={true}
             >
-                <div onClick={e => e.stopPropagation()}>
+                <div onClick={(e) => e.stopPropagation()}>
                     <h2 className="text-lg font-semibold mb-4">Действия с юзернеймом</h2>
                     <div className="flex flex-col gap-2">
                         <button
@@ -175,5 +200,6 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
         </div>
     );
 };
+
 
 export default TestPackCompletionCard;

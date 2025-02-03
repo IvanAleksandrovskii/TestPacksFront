@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
 import { quizApi } from "../api/quizApi";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 Modal.setAppElement("#root");
@@ -18,10 +19,10 @@ const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
     >
         <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">
             <h2 className="text-lg font-semibold mb-4">
-                Вы уверены, что хотите удалить тест? 
+                Вы уверены, что хотите удалить тест?
                 <strong>
-                    Этот тест будет удален из всех наборов, 
-                    а опустевшие полностью из них так же 
+                    Этот тест будет удален из всех наборов,
+                    а опустевшие полностью из них так же
                     будут удалены
                 </strong>
             </h2>
@@ -94,7 +95,7 @@ function TestList({ tgUser }) {
     };
 
     if (isLoading) {
-        return <div className="text-center text-gray-500 mt-12">Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     // Проверяем лимит
@@ -151,8 +152,8 @@ function TestList({ tgUser }) {
                 onClick={() => !isLimitReached && navigate("/create")}
                 disabled={isLimitReached}
                 className={`px-4 py-2 w-full rounded mb-8 mt-4 text-white ${isLimitReached
-                        ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"
-                        : "bg-blue-500 hover:bg-blue-600"
+                    ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"
+                    : "bg-blue-500 hover:bg-blue-600"
                     }`}
             >
                 {isLimitReached ? "To create a test delete one" : "Create Test"}

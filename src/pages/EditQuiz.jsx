@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import QuizForm from "../components/QuizForm";
 import { quizApi } from "../api/quizApi";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 const EditQuiz = ({ creatorId }) => {
@@ -50,7 +51,7 @@ const EditQuiz = ({ creatorId }) => {
     };
 
     if (loading) {
-        return <div className="text-center text-gray-500 mt-8">Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     if (error) {

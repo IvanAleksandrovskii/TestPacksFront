@@ -54,15 +54,17 @@ export const testPacksApi = {
     },
 
     // Получаем список прохождений тестов пользователя
-    getTestCompletions: async (userId, status, page = 1, page_size = 20) => {
-        const response = await axios.get(`${BASE_URL}/api/test-completions`, {
-            params: {
-                user_id: userId,
-                status: status,
-                page: page,
-                page_size: page_size
-            }
-        });
+    getTestCompletions: async (userId, status, testPack = "", page = 1, page_size = 20) => {
+        const params = {
+            user_id: userId,
+            status: status,
+            page: page,
+            page_size: page_size,
+        };
+        if (testPack) {
+            params.test_pack = testPack;
+        }
+        const response = await axios.get(`${BASE_URL}/api/test-completions`, { params });
         return response.data;
     },
 };

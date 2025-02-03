@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";  // , useParams
 
 import { testPacksApi } from "../api/testPacksApi";
 import TestPackFormTwoGroups from "../components/TestPackFormTwoGroups";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 function CreateTestPack({ creatorId, creatorUsername }) {
@@ -61,7 +62,7 @@ function CreateTestPack({ creatorId, creatorUsername }) {
         }
     };
 
-    if (loading) return <div className="text-center text-gray-500 mt-12">Loading...</div>;
+    if (loading) return <LoadingSpinner />;
 
     return (
         <TestPackFormTwoGroups
