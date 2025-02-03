@@ -62,6 +62,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     const handleTabChange = (event, newValue) => {
         setActiveTab(newValue);
         setCurrentPage(1);
+        setSelectedTestPack("");
     };
 
     // Изменение количества элементов на странице – сброс страницы
