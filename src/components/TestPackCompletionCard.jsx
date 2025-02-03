@@ -72,7 +72,7 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
             onClick={onClick}
         >
             <div className="flex justify-between items-start">
-                <div className="flex-grow">
+                <div className="flex-grow max-w-full">
                     <div className="flex justify-between items-start">
                         <h3 className="text-lg font-bold text-gray-800 truncate pr-2">
                             {completion.test_pack_name}
@@ -121,7 +121,7 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
                 </div>
             </div>
 
-            <div className="gap-4 text-sm bg-gray-50 p-3 rounded-lg">
+            <div className="gap-4 text-sm bg-gray-50 p-3 rounded-lg text-black">
                 <div className="space-y-1">
                     <div className="flex justify-between">
                         <span className="text-gray-500">Пройдено</span>

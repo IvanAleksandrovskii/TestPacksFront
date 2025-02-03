@@ -106,7 +106,7 @@ function App() {
             <Route path="/tests" element={<TestList tgUser={tgUser} />} />
             <Route path="/test_packs" element={<TestPackList creatorId={tgUser?.id} />} />
 
-            <Route path="/test-completions" element={<TestPackCompletionsPage tgUser={tgUser} />} />
+            <Route path="/test-completions" element={<TestPackCompletionsPage tgUser={tgUser} isDarkMode={isDarkMode} />} />
           </Route>
           <Route path="/test-completions/:id" element={<TestPackCompletionDetails />} />
 

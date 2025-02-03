@@ -7,7 +7,7 @@ import { testPacksApi } from "../api/testPacksApi";
 import TestPackCompletionCard from "../components/TestPackCompletionCard";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-const TestPackCompletionsPage = ({ tgUser }) => {
+const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     // Управляем вкладками: "IN_PROGRESS", "COMPLETED", "ABANDONED"
     const [activeTab, setActiveTab] = useState("COMPLETED");
     // Фильтр по выбранному тест-паку (по его UUID)
@@ -88,21 +88,23 @@ const TestPackCompletionsPage = ({ tgUser }) => {
                 onChange={handleTabChange}
                 variant="fullWidth"
                 className="mb-6"
+                
                 sx={{
-                    // Responsive text sizing using breakpoints
                     '& .MuiTab-root': {
-                        // Default text size
-                        fontSize: '1rem',
-
-                        // Slightly smaller on medium screens
-                        '@media (max-width:900px)': {
-                            fontSize: '0.9rem'
+                        fontSize: '0.9rem',
+                        color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
+                        '&.Mui-selected': {
+                            color: isDarkMode ? '#fff' : '#000', // Цвет активной вкладки
                         },
-
-                        // Even smaller on small screens
-                        '@media (max-width:600px)': {
+                        '@media (max-width:900px)': {
                             fontSize: '0.8rem'
+                        },
+                        '@media (max-width:600px)': {
+                            fontSize: '0.7rem'
                         }
+                    },
+                    '& .MuiTabs-indicator': {
+                        backgroundColor: isDarkMode ? '#fff' : '#000' // Цвет подчеркивания активной вкладки
                     }
                 }}
             >
