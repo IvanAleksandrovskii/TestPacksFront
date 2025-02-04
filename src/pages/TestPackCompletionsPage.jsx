@@ -1,11 +1,14 @@
 // src/pages/TestPackCompletionsPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tabs, Tab, Pagination } from "@mui/material";
+import { Tabs, Tab } from "@mui/material";
+import ReactPaginate from "react-paginate";
 
 import { testPacksApi } from "../api/testPacksApi";
 import TestPackCompletionCard from "../components/TestPackCompletionCard";
 import LoadingSpinner from "../components/LoadingSpinner";
+
+import "../style/pagination.css";
 
 const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     // Управляем вкладками: "IN_PROGRESS", "COMPLETED", "ABANDONED"
@@ -24,6 +27,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,6 +35,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
             if (!tgUser?.id) return;
             setIsLoading(true);
             setError(null);
+
             try {
                 // Передаём user_id, статус (activeTab), выбранный тест-пак, номер страницы и размер страницы
                 const data = await testPacksApi.getTestCompletions(
@@ -77,6 +82,11 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
         setCurrentPage(1);
     };
 
+    // ReactPaginate отдаёт pageIndex с нуля. Для нашей логики +1
+    const handlePageClick = (event) => {
+        setCurrentPage(event.selected + 1);
+    };
+
     return (
         <div className="p-4 max-w-2xl mx-auto">
             <h1 className="text-2xl font-bold mb-6 text-center">
@@ -93,9 +103,11 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                 sx={{
                     "& .MuiTab-root": {
                         fontSize: "0.8rem",
-                        color: isDarkMode ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)",
+                        color: isDarkMode
+                            ? "rgba(255, 255, 255, 0.6)"
+                            : "rgba(0, 0, 0, 0.6)",
                         "&.Mui-selected": {
-                            color: isDarkMode ? "#fff" : "#000", // Цвет активной вкладки
+                            color: isDarkMode ? "#fff" : "#000",
                         },
                         "@media (max-width:900px)": {
                             fontSize: "0.7rem",
@@ -105,7 +117,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                         },
                     },
                     "& .MuiTabs-indicator": {
-                        backgroundColor: isDarkMode ? "#fff" : "#000", // Цвет подчеркивания активной вкладки
+                        backgroundColor: isDarkMode ? "#fff" : "#000",
                     },
                 }}
             >
@@ -130,6 +142,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                         onChange={handlePageSizeChange}
                         className="px-3 py-1 border rounded text-black"
                     >
+                        <option value={1}>1 на страницу</option>
                         <option value={5}>5 на странице</option>
                         <option value={10}>10 на странице</option>
                         <option value={20}>20 на странице</option>
@@ -138,6 +151,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                     </select>
                 </div>
             </div>
+
             <div className="mb-4 flex items-center justify-between">
                 <select
                     value={selectedTestPack}
@@ -153,12 +167,15 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                 </select>
             </div>
 
-            {isLoading && <LoadingSpinner />}
-
+            {/* Если есть ошибка – показываем её, а всё остальное не выводим */}
             {error && (
                 <div className="text-red-500 text-center p-4">{error}</div>
             )}
 
+            {/* Если идёт загрузка – показываем спиннер */}
+            {isLoading && <LoadingSpinner />}
+
+            {/* Если загрузка завершена и нет ошибки, показываем список и пагинацию */}
             {!isLoading && !error && (
                 <>
                     {completionsData.data.length === 0 ? (
@@ -172,27 +189,33 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                                     key={completion.test_pack_id}
                                     completion={completion}
                                     onClick={() =>
-                                        navigate(`/test-completions/${completion.test_pack_id}`)
+                                        navigate(
+                                            `/test-completions/${completion.test_pack_id}`
+                                        )
                                     }
                                 />
                             ))}
                         </div>
                     )}
+
                     {completionsData.total_pages > 1 && (
-                        <div className="flex justify-center mt-4">
-                            <Pagination
-                                count={completionsData.total_pages}
-                                page={currentPage}
-                                onChange={(event, value) => setCurrentPage(value)}
-                                color="primary"
-                                className="mb-6"
-                                sx={{
-                                    "& .MuiPaginationItem-root": {
-                                        color: isDarkMode ? "#fff" : "#000",
-                                    },
-                                }}
-                            />
-                        </div>
+                        <ReactPaginate
+                            pageCount={completionsData.total_pages}
+                            pageRangeDisplayed={3}
+                            marginPagesDisplayed={1}
+                            onPageChange={handlePageClick}
+                            forcePage={currentPage - 1}
+                            containerClassName="pagination-container"
+                            pageClassName="page-item"
+                            pageLinkClassName="page-link"
+                            previousClassName="page-item"
+                            nextClassName="page-item"
+                            breakClassName="page-item"
+                            activeClassName="active"
+                            previousLabel="<"
+                            nextLabel=">"
+                            breakLabel="..."
+                        />
                     )}
                 </>
             )}

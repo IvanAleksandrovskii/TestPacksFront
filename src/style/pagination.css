@@ -1,0 +1,61 @@
+/* Обертка-список всех страниц */
+.pagination-container {
+    display: flex;
+    list-style-type: none;
+    /* убираем стандартные маркеры <ul>/<li> */
+    padding: 0;
+    margin: 1rem auto;
+    /* чуть-чуть отступов и центрирование */
+    justify-content: center;
+}
+
+/* Каждый <li> контейнер одной «страницы» */
+.page-item {
+    margin: 0 4px;
+    /* небольшой горизонтальный отступ между «кнопками» */
+}
+
+/* Ссылка внутри <li> */
+.page-link {
+    display: inline-block;
+    padding: 4px 8px;
+    /* уменьшенная высота и ширина */
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    /* уменьшаем радиус скругления */
+    color: #333;
+    font-size: 0.8rem;
+    /* уменьшенный шрифт */
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+
+/* При наведении */
+.page-link:hover {
+    background-color: #f0f0f0;
+}
+
+/* Активная страница */
+.active .page-link {
+    background-color: #1976d2;
+    /* например, цвет MUI primary */
+    color: #fff;
+    border-color: #1976d2;
+}
+
+/* Предыдущая и следующая кнопка тоже можно стилизовать */
+.page-item:first-of-type .page-link,
+/* previousLabel */
+.page-item:last-of-type .page-link {
+    /* nextLabel */
+    font-weight: bold;
+}
+
+/* Страница-разделитель (breakLabel "...") */
+.page-item.break .page-link {
+    border: none;
+    background: transparent;
+    cursor: default;
+    color: #666;
+}
