@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { MessageSquare, Phone, Copy } from "lucide-react";
+import { MessageSquare, Copy } from "lucide-react";
 
 const renderValue = (value) => {
     return value === "Не указано" ? "" : value;

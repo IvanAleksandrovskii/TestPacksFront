@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import Modal from "react-modal";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, MessageSquare, Copy } from "lucide-react";
 
 
 const PsychoTestCard = ({ test }) => {
@@ -118,6 +119,10 @@ const CustomTestCard = ({ test }) => {
     );
 };
 
+const renderValue = (value) => {
+    return value === "Не указано" ? "" : value;
+};
+
 const TestPackCompletionDetails = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -127,6 +132,13 @@ const TestPackCompletionDetails = () => {
     const [showPsychoTests, setShowPsychoTests] = useState(true);
     const [showCustomTests, setShowCustomTests] = useState(true);
     const [showPendingTests, setShowPendingTests] = useState(true);
+
+    const [isUsernameModalOpen, setUsernameModalOpen] = useState(false);
+
+    const firstName = renderValue(completion.user_data.first_name);
+    const lastName = renderValue(completion.user_data.last_name);
+    const username = renderValue(completion.user_data.username);
+    const phone = renderValue(completion.user_data.phone);
 
     useEffect(() => {
         const tg = window?.Telegram?.WebApp;
@@ -169,6 +181,54 @@ const TestPackCompletionDetails = () => {
     const psychoTests = completion.completed_tests.filter(test => test.type === 'test');
     const customTests = completion.completed_tests.filter(test => test.type === 'custom');
 
+    const handleCopyUsername = async (e) => {
+        e.stopPropagation();
+        try {
+            await navigator.clipboard.writeText(username);
+            if (window.Telegram?.WebApp?.showPopup) {
+                window.Telegram.WebApp.showPopup({
+                    message: "Юзернейм скопирован в буфер обмена",
+                    buttons: [{ type: "close" }],
+                });
+            } else {
+                alert("Юзернейм скопирован в буфер обмена");
+            }
+        } catch (err) {
+            console.error("Ошибка при копировании юзернейма:", err);
+        }
+        setUsernameModalOpen(false);
+    };
+
+    const handleOpenChat = (e) => {
+        e.stopPropagation();
+        if (username) {
+            window.Telegram.WebApp.openLink(`https://t.me/${username}`);
+        }
+        setUsernameModalOpen(false);
+    };
+
+    const handleCopyPhone = async (e) => {
+        e.stopPropagation();
+        try {
+            await navigator.clipboard.writeText(phone);
+            if (window.Telegram?.WebApp?.showPopup) {
+                window.Telegram.WebApp.showPopup({
+                    message: "Телефон скопирован в буфер обмена",
+                    buttons: [{ type: "close" }],
+                });
+            } else {
+                alert("Телефон скопирован в буфер обмена");
+            }
+        } catch (err) {
+            console.error("Ошибка при копировании телефона:", err);
+        }
+    };
+
+    const handleUsernameClick = (e) => {
+        e.stopPropagation();
+        setUsernameModalOpen(true);
+    };
+
     return (
         <div className="max-w-2xl mx-auto p-4">
             <div className="mb-6">
@@ -193,6 +253,35 @@ const TestPackCompletionDetails = () => {
                                 ? "Отменено"
                                 : "В процессе"}
                     </span>
+                </div>
+                <div className="flex justify-between items-center mt-2">
+
+                    <p className="text-gray-600 font-medium break-words" style={{ overflowWrap: 'anywhere' }}>
+                        {firstName} {lastName}
+                    </p>
+
+                    <div className="flex gap-2 grid grid-cols-1 min-w-max">
+                        {username && (
+                            <button
+                                type="button"
+                                className="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-md transition-colors flex items-center gap-1 text-xs"
+                                onClick={handleUsernameClick}
+                            >
+                                <MessageSquare size={14} />
+                                <span>@{username}</span>
+                            </button>
+                        )}
+                        {phone && (
+                            <button
+                                type="button"
+                                className="px-2 py-1 bg-green-50 hover:bg-green-100 text-green-600 rounded-md transition-colors flex items-center gap-1 text-xs"
+                                onClick={handleCopyPhone}
+                            >
+                                <Copy size={14} />
+                                <span>{phone}</span>
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -258,7 +347,47 @@ const TestPackCompletionDetails = () => {
                     )}
                 </div>
             )}
+
+            <Modal
+                isOpen={isUsernameModalOpen}
+                onRequestClose={(e) => {
+                    e.stopPropagation();
+                    setUsernameModalOpen(false);
+                }}
+                className="bg-white p-4 rounded shadow-lg max-w-xs mx-auto mt-20"
+                overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+                shouldCloseOnOverlayClick={true}
+            >
+                <div onClick={(e) => e.stopPropagation()}>
+                    <h2 className="text-lg font-semibold mb-4">Действия с юзернеймом</h2>
+                    <div className="flex flex-col gap-2">
+                        <button
+                            onClick={handleCopyUsername}
+                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                        >
+                            Скопировать юзернейм
+                        </button>
+                        <button
+                            onClick={handleOpenChat}
+                            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
+                        >
+                            Перейти в чат
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setUsernameModalOpen(false);
+                            }}
+                            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors duration-200"
+                        >
+                            Отмена
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+
         </div>
+
     );
 };
 
