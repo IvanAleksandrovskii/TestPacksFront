@@ -186,6 +186,11 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                                 onChange={(event, value) => setCurrentPage(value)}
                                 color="primary"
                                 className="mb-6"
+                                sx={{
+                                    "& .MuiPaginationItem-root": {
+                                        color: isDarkMode ? "#fff" : "#000",
+                                    },
+                                }}
                             />
                         </div>
                     )}
