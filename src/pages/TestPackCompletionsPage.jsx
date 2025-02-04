@@ -9,7 +9,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 
 const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     // Управляем вкладками: "IN_PROGRESS", "COMPLETED", "ABANDONED"
-    const [activeTab, setActiveTab] = useState("COMPLETED");
+    const [activeTab, setActiveTab] = useState("");
     // Фильтр по выбранному тест-паку (по его UUID)
     const [selectedTestPack, setSelectedTestPack] = useState("");
     // Состояние для данных, полученных из API, включая список тестпаков
@@ -80,37 +80,42 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     return (
         <div className="p-4 max-w-2xl mx-auto">
             <h1 className="text-2xl font-bold mb-6 text-center">
-                Мои прохождения тестов
+                Прохождения наборов тестов
             </h1>
 
-            {/* Вкладки для фильтрации по статусу */}
             <Tabs
                 value={activeTab}
                 onChange={handleTabChange}
-                variant="fullWidth"
+                variant="scrollable"
+                scrollButtons="auto"
+                allowScrollButtonsMobile
                 className="mb-6"
-                
                 sx={{
-                    '& .MuiTab-root': {
-                        fontSize: '0.9rem',
-                        color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
-                        '&.Mui-selected': {
-                            color: isDarkMode ? '#fff' : '#000', // Цвет активной вкладки
+                    "& .MuiTab-root": {
+                        fontSize: "0.8rem",
+                        color: isDarkMode ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)",
+                        "&.Mui-selected": {
+                            color: isDarkMode ? "#fff" : "#000", // Цвет активной вкладки
                         },
-                        '@media (max-width:900px)': {
-                            fontSize: '0.8rem'
+                        "@media (max-width:900px)": {
+                            fontSize: "0.7rem",
                         },
-                        '@media (max-width:600px)': {
-                            fontSize: '0.7rem'
-                        }
+                        "@media (max-width:600px)": {
+                            fontSize: "0.6rem",
+                        },
                     },
-                    '& .MuiTabs-indicator': {
-                        backgroundColor: isDarkMode ? '#fff' : '#000' // Цвет подчеркивания активной вкладки
-                    }
+                    "& .MuiTabs-indicator": {
+                        backgroundColor: isDarkMode ? "#fff" : "#000", // Цвет подчеркивания активной вкладки
+                    },
                 }}
             >
-                <Tab label="В процессе" value="IN_PROGRESS" />
+                <Tab label="Все" value="" />
                 <Tab label="Завершённые" value="COMPLETED" />
+                <Tab
+                    label="В процессе"
+                    value="IN_PROGRESS"
+                    style={{ whiteSpace: "nowrap" }}
+                />
                 <Tab label="Отменённые" value="ABANDONED" />
             </Tabs>
 
