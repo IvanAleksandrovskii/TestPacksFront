@@ -1,6 +1,6 @@
 // src/pages/TestPackCompletionsPage.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Tabs, Tab } from "@mui/material";
 import ReactPaginate from "react-paginate";
 
@@ -11,11 +11,9 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import "../style/pagination.css";
 
 const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
-    // Управляем вкладками: "IN_PROGRESS", "COMPLETED", "ABANDONED"
+    // State initialization with default values
     const [activeTab, setActiveTab] = useState("");
-    // Фильтр по выбранному тест-паку (по его UUID)
     const [selectedTestPack, setSelectedTestPack] = useState("");
-    // Состояние для данных, полученных из API, включая список тестпаков
     const [completionsData, setCompletionsData] = useState({
         total_count: 0,
         data: [],
@@ -27,17 +25,35 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isInitialized, setIsInitialized] = useState(false);
 
+    const location = useLocation();
     const navigate = useNavigate();
 
+    // First, handle state restoration from navigation
+    useEffect(() => {
+        if (location.state && !isInitialized) {
+            const { activeTab: savedTab, selectedTestPack: savedPack, currentPage: savedPage, pageSize: savedSize } = location.state;
+
+            setActiveTab(savedTab || "");
+            setSelectedTestPack(savedPack || "");
+            setCurrentPage(savedPage || 1);
+            setPageSize(savedSize || 20);
+            setIsInitialized(true);
+        } else if (!isInitialized) {
+            setIsInitialized(true);
+        }
+    }, [location.state, isInitialized]);
+
+    // Then fetch data only after state is initialized
     useEffect(() => {
         const fetchData = async () => {
-            if (!tgUser?.id) return;
+            if (!tgUser?.id || !isInitialized) return;
+
             setIsLoading(true);
             setError(null);
 
             try {
-                // Передаём user_id, статус (activeTab), выбранный тест-пак, номер страницы и размер страницы
                 const data = await testPacksApi.getTestCompletions(
                     tgUser.id,
                     activeTab,
@@ -50,7 +66,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                     data: data.data,
                     current_page: data.current_page,
                     total_pages: data.total_pages,
-                    test_pack_list: data.test_pack_list, // список тестпаков возвращается API
+                    test_pack_list: data.test_pack_list,
                 });
             } catch (error) {
                 console.error("Fetch error:", error);
@@ -61,31 +77,42 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
         };
 
         fetchData();
-    }, [activeTab, selectedTestPack, pageSize, currentPage, tgUser]);
+    }, [activeTab, selectedTestPack, pageSize, currentPage, tgUser, isInitialized]);
 
-    // Обработчик смены вкладок – сбрасываем текущую страницу
     const handleTabChange = (event, newValue) => {
         setActiveTab(newValue);
         setCurrentPage(1);
         setSelectedTestPack("");
     };
 
-    // Изменение количества элементов на странице – сброс страницы
     const handlePageSizeChange = (e) => {
         setPageSize(Number(e.target.value));
         setCurrentPage(1);
     };
 
-    // Обработчик выбора тест-пака из выпадающего списка – сброс страницы
     const handleTestPackChange = (e) => {
         setSelectedTestPack(e.target.value);
         setCurrentPage(1);
     };
 
-    // ReactPaginate отдаёт pageIndex с нуля. Для нашей логики +1
     const handlePageClick = (event) => {
         setCurrentPage(event.selected + 1);
     };
+
+    const handleCardClick = (completion) => {
+        navigate(`/test-completions/${completion.test_pack_id}`, {
+            state: {
+                completion,
+                filters: {
+                    activeTab,
+                    selectedTestPack,
+                    currentPage,
+                    pageSize
+                }
+            }
+        });
+    };
+
 
     return (
         <div className="p-4 max-w-2xl mx-auto">
@@ -142,7 +169,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                         onChange={handlePageSizeChange}
                         className="px-3 py-1 border rounded text-black"
                     >
-                        <option value={1}>1 на страницу</option>
+                        {/* <option value={1}>1 на страницу</option> */}
                         <option value={5}>5 на странице</option>
                         <option value={10}>10 на странице</option>
                         <option value={20}>20 на странице</option>
@@ -188,11 +215,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                                 <TestPackCompletionCard
                                     key={completion.test_pack_id}
                                     completion={completion}
-                                    onClick={() =>
-                                        navigate(
-                                            `/test-completions/${completion.test_pack_id}`
-                                        )
-                                    }
+                                    onClick={handleCardClick}
                                 />
                             ))}
                         </div>

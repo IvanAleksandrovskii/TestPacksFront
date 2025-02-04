@@ -19,7 +19,8 @@ import EditTestPack from './pages/EditTestPack';
 import Home from './pages/Home';
 
 import TestPackCompletionsPage from './pages/TestPackCompletionsPage';
-import TestPackCompletionDetails from './components/TestPackCompletionDetails';
+
+import TestPackCompletionDetails from './pages/TestPackCompletionDetails';
 
 
 
@@ -108,7 +109,10 @@ function App() {
 
             <Route path="/test-completions" element={<TestPackCompletionsPage tgUser={tgUser} isDarkMode={isDarkMode} />} />
           </Route>
-          <Route path="/test-completions/:id" element={<TestPackCompletionDetails />} />
+          <Route
+            path="/test-completions/:id"
+            element={<TestPackCompletionDetails />}
+          />
 
           <Route path="/create" element={<CreateQuiz tgUser={tgUser} />} />
           <Route path="/edit/:id" element={<EditQuiz creatorId={tgUser?.id} />} />

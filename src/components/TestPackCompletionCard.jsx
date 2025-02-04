@@ -69,7 +69,7 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
     return (
         <div
             className="border rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer bg-white space-y-3"
-            onClick={onClick}
+            onClick={() => onClick(completion)}
         >
             <div className="flex justify-between items-start">
                 <div className="flex-grow max-w-full">
