@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
-import { Share2, Pencil, Trash2} from "lucide-react";
+import { Share2, Pencil, Trash2, Trash, Share } from "lucide-react";
 
 import { testPacksApi } from "../api/testPacksApi";
 import { BOT_USERNAME } from "../api/constants";
@@ -120,7 +120,7 @@ function TestPackList({ creatorId }) {
                         key={pack.id}
                         className="flex flex-col p-4 border rounded shadow-sm bg-white hover:shadow-md transition-shadow"
                     >
-                        <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center">
                             <div className="flex-1">
                                 <span
                                     className="text-lg font-medium break-words"
@@ -136,21 +136,17 @@ function TestPackList({ creatorId }) {
                                 </span>
                                 <div className="flex flex-col gap-1 mt-2 text-sm text-gray-500">
                                     <div className="flex items-center gap-1">
-                                        <span>{pack.tests?.length || 0} psychological tests</span>
+                                        <span>Психологических тестов: {pack.tests?.length || 0}</span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        <span>{pack.custom_tests?.length || 0} custom tests</span>
+                                        <span>Пользовательских тестов: {pack.custom_tests?.length || 0}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => handleShare(pack.id)}
-                                    className="p-2 text-green-500 hover:bg-green-50 rounded-full transition-colors"
-                                    title="Share pack"
-                                >
-                                    <Share2 size={20} />
-                                </button>
+
+                            {/* Блок кнопок */}
+                            <div className="grid grid-cols-2 gap-2 items-center">
+                                {/* Кнопки "Удалить" и "Редактировать" в одной строке */}
                                 <button
                                     onClick={() => openModal(pack.id)}
                                     className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
@@ -165,8 +161,19 @@ function TestPackList({ creatorId }) {
                                 >
                                     <Pencil size={20} />
                                 </button>
+
+                                {/* Кнопка "Поделиться" на всю ширину (col-span-2) */}
+                                <button
+                                    onClick={() => handleShare(pack.id)}
+                                    className="pt-1 pb-1 pr-2 pl-2 text-green-500 border border-green-500 hover:bg-green-50 rounded-full transition-colors flex items-center justify-center gap-2 col-span-2"
+                                    title="Share pack"
+                                >
+                                    <Share2 size={14} />
+                                    share
+                                </button>
                             </div>
                         </div>
+
                     </li>
                 ))}
                 {packs.length === 0 && (
