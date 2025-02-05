@@ -108,12 +108,20 @@ const CustomTestCard = ({ test }) => {
                             </div>
                         )}
 
-                        {test.result.total_score !== undefined && (
-                            <div className="flex justify-between items-center p-3 bg-gray-100 rounded-lg">
-                                <span className="font-medium">Итоговый балл:</span>
-                                <span className={`font-bold ${test.result.total_score >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                    {test.result.total_score}
-                                </span>
+                        {test.result.score !== undefined && (
+                            <div>
+                                <div className="flex justify-between items-center p-3 bg-gray-100 rounded-lg">
+                                    <span className="font-medium">Итоговый балл:</span>
+                                    <span className={`font-bold ${test.result.score >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                        {test.result.score}
+                                    </span>
+                                </div>
+                                {/* {test.result.total_score !== undefined && (  // TODO: FIELD DELETED ON BACKEND
+                                    <div className="flex justify-between p-3 pt-1 text-sm text-gray-500 mt-1">
+                                        <span></span>
+                                        <span className='underline italic'>максимум возможно: {test.result.total_score}</span>
+                                    </div>
+                                )} */}
                             </div>
                         )}
                     </div>
