@@ -89,7 +89,12 @@ function TestList({ tgUser }) {
         }
     };
 
-    if (isLoading) return <LoadingSpinner />;
+    if (isLoading) return (
+        <div className="p-2 max-w-2xl mx-auto">
+            <h1 className="text-2xl font-bold mb-6 text-center">My Tests</h1>
+            <LoadingSpinner />
+        </div>
+    );
 
     const MAX_TESTS = 10;
     const isLimitReached = tests.length >= MAX_TESTS;
@@ -161,7 +166,7 @@ function TestList({ tgUser }) {
             <DeleteConfirmation
                 isOpen={isModalOpen}
                 onConfirm={handleDelete}
-                onCancel={closeModal} 
+                onCancel={closeModal}
             />
         </div>
     );
