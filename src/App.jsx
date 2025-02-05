@@ -94,9 +94,10 @@ function App() {
 
   // Если тема тёмная => текст белый, иначе чёрный.
   const textColor = isDarkMode ? 'white' : 'black';
+  const backgroundColor = isDarkMode ? '#020202' : '#ffffff';  // TODO: Цвет фона
 
   return (
-    <div className="app-container" style={{ color: textColor }}>
+    <div className="app-container" style={{ color: textColor, backgroundColor: backgroundColor }}>
       <div className="content">
         <Routes>
           <Route
@@ -111,7 +112,7 @@ function App() {
           </Route>
           <Route
             path="/test-completions/:id"
-            element={<TestPackCompletionDetails />}
+            element={<TestPackCompletionDetails tgUser={tgUser} />}
           />
 
           <Route path="/create" element={<CreateQuiz tgUser={tgUser} />} />

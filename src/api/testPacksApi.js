@@ -44,11 +44,8 @@ export const testPacksApi = {
         return response.data; // ожидаем массив TestOut
     },
 
-    // Добавляем метод getCustomTests:  // TODO: Doublecheck
+    // Получаем список CustomTests
     async getCustomTests(creatorId) {
-        // Предположим, у вас на бэкенде есть эндпоинт:
-        //   GET /api/custom_tests/{creatorId}
-        // который возвращает список кастомных тестов конкретного пользователя
         const response = await axios.get(`${BASE_URL}/api/custom_tests/${creatorId}`);
         return response.data;
     },
@@ -66,5 +63,36 @@ export const testPacksApi = {
         }
         const response = await axios.get(`${BASE_URL}/api/test-completions/`, { params });
         return response.data;
+    },
+
+    getAITrancription: async (userId, testPackCompletionId) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/ai_transcription/`, {
+                params: {
+                    user_id: userId,
+                    test_pack_completion_id: testPackCompletionId
+                }
+            });
+            return response.data;
+        } catch (error) {
+            // Log the error details for debugging
+            console.error('AI Transcription Error:', error.response?.data || error.message);
+            throw error;
+        }
+    },
+
+    clearAITranscription: async (userId, testPackCompletionId) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/ai_transcription_clear/`, {
+                params: {
+                    user_id: userId,
+                    test_pack_completion_id: testPackCompletionId
+                }
+            });
+            return response.status === 204 ? null : response.data;
+        } catch (error) {
+            console.error('Clear AI Transcription Error:', error.response?.data || error.message);
+            throw error;
+        }
     },
 };

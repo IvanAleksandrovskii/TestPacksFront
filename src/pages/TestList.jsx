@@ -103,7 +103,7 @@ function TestList({ tgUser }) {
     const isLimitReached = tests.length >= MAX_TESTS;
 
     return (
-        <div className="p-2 w-full">
+        <div className="p-2 max-w-2xl mx-auto">
             <h1 className="text-2xl font-bold mb-6 text-center">My Tests</h1>
 
             <ul className="space-y-4">

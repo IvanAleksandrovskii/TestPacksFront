@@ -11,7 +11,7 @@ const NavigationPanel = ({ isDarkMode }) => {
   
   return (
     <div className={`fixed bottom-0 left-0 right-0 h-16 flex items-center justify-center ${
-      isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+      isDarkMode ? 'bg-black border-gray-700' : 'bg-white border-gray-200'  //  TODO: Цвет нав панели
     } border-t`}>
       <div className="flex justify-around w-full max-w-md">
         

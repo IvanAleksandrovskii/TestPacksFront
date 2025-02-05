@@ -6,6 +6,10 @@ import { ru } from 'date-fns/locale';
 
 import { ChevronDown, ChevronUp, MessageSquare, Copy } from "lucide-react";
 
+import { testPacksApi } from "../api/testPacksApi";
+
+import AITranscriptionCard from "../components/AITranscriptionCard";
+
 
 const PsychoTestCard = ({ test }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -123,7 +127,7 @@ const renderValue = (value) => {
     return value === "Не указано" ? "" : value;
 };
 
-const TestPackCompletionDetails = () => {
+const TestPackCompletionDetails = ( { tgUser } ) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { completion, filters } = location.state || {};
@@ -139,6 +143,8 @@ const TestPackCompletionDetails = () => {
     const lastName = renderValue(completion.user_data.last_name);
     const username = renderValue(completion.user_data.username);
     const phone = renderValue(completion.user_data.phone);
+
+    const [aiTranscription, setAiTranscription] = useState(completion?.ai_transcription || null);
 
     useEffect(() => {
         const tg = window?.Telegram?.WebApp;
@@ -229,6 +235,32 @@ const TestPackCompletionDetails = () => {
         setUsernameModalOpen(true);
     };
 
+    const handleClearAiTranscription = async () => {
+        try {
+            await testPacksApi.clearAITranscription(tgUser.id, completion.id);
+            if (window.Telegram?.WebApp?.showPopup) {
+                window.Telegram.WebApp.showPopup({
+                    message: "Информация о результатах удалена",
+                    buttons: [{ type: "close" }],
+                });
+            } else {
+                alert("Информация о результатах удалена");
+            }
+            setAiTranscription(null);
+        } catch (err) {
+            console.error("Ошибка при удалении информации о результатах:", err);
+        }
+    };
+    
+    const handleGetAiTranscription = async () => {
+        try {
+            const data = await testPacksApi.getAITrancription(tgUser.id, completion.id);
+            setAiTranscription(data);
+        } catch (err) {
+            console.error("Ошибка при получении информации ИИ расшифровки:", err);
+        }
+    };
+
     return (
         <div className="max-w-2xl mx-auto p-4">
             <div className="mb-6">
@@ -297,6 +329,25 @@ const TestPackCompletionDetails = () => {
                             {showPsychoTests ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
                         </span>
                     </button>
+                    {/* 
+                    {showPsychoTests && aiTranscription && completion.status === "COMPLETED" && (
+                        <div className="bg-gray-50 p-4 rounded-lg text-black">
+                            <div className="space-y-4">
+                                <p>Транскрипция:</p>
+                                <p>{aiTranscription}</p>
+                            </div>
+                        </div>
+                    )} */}
+                    {showPsychoTests && (
+                        <AITranscriptionCard
+                            aiTranscription={aiTranscription}
+                            onGetTranscription={handleGetAiTranscription}
+                            onClearTranscription={handleClearAiTranscription}
+                            isCompletionFinished={completion.status === "COMPLETED"}
+                            hasPsychoTests={psychoTests.length > 0}
+                        />
+                    )}
+
                     {showPsychoTests && psychoTests.map((test, index) => (
                         <PsychoTestCard key={`${test.id}-${index}`} test={test} />
                     ))}

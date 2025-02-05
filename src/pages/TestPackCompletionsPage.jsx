@@ -213,7 +213,7 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
                         <div className="space-y-4 mb-6">
                             {completionsData.data.map((completion) => (
                                 <TestPackCompletionCard
-                                    key={completion.test_pack_id}
+                                    key={`${completion.test_pack_id}-${completion.id}`} // Using a compound key
                                     completion={completion}
                                     onClick={handleCardClick}
                                 />
