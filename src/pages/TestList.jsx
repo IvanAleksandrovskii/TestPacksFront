@@ -1,15 +1,12 @@
-// src/pages/TestList.jsx
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
+import { Pencil, Trash2, HelpCircle } from "lucide-react";
 
 import { quizApi } from "../api/quizApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-
 Modal.setAppElement("#root");
-
 
 const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
     <Modal
@@ -49,14 +46,12 @@ function TestList({ tgUser }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setModalOpen] = useState(false);
     const [testToDelete, setTestToDelete] = useState(null);
-
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchTests = async () => {
             setIsLoading(true);
             try {
-                // Предполагаем, что quizApi.getTests(userId) вернёт список тестов
                 const response = await quizApi.getTests(tgUser.id);
                 setTests(response);
             } catch (error) {
@@ -71,6 +66,16 @@ function TestList({ tgUser }) {
         }
     }, [tgUser]);
 
+    const openModal = (testId) => {
+        setTestToDelete(testId);
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setTestToDelete(null);
+    };
+
     const handleDelete = async () => {
         if (!testToDelete) return;
         try {
@@ -84,21 +89,8 @@ function TestList({ tgUser }) {
         }
     };
 
-    const openModal = (testId) => {
-        setTestToDelete(testId);
-        setModalOpen(true);
-    };
+    if (isLoading) return <LoadingSpinner />;
 
-    const closeModal = () => {
-        setModalOpen(false);
-        setTestToDelete(null);
-    };
-
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
-
-    // Проверяем лимит
     const MAX_TESTS = 10;
     const isLimitReached = tests.length >= MAX_TESTS;
 
@@ -110,35 +102,43 @@ function TestList({ tgUser }) {
                 {tests.map((test) => (
                     <li
                         key={test.id}
-                        className="flex flex-col p-4 border rounded shadow-sm bg-white"
+                        className="flex flex-col p-4 border rounded shadow-sm bg-white hover:shadow-md transition-shadow"
                     >
-                        {/* Название теста: с автопереносом (hyphens) */}
-                        <span
-                            className="text-lg font-medium mb-3 break-words"
-                            style={{
-                                color: "black",
-                                whiteSpace: "pre-wrap",
-                                wordBreak: "break-word",
-                                overflowWrap: "break-word",
-                                hyphens: "auto", // позв. браузеру вставлять дефисы при переносе
-                            }}
-                        >
-                            {test.name}
-                        </span>
-
-                        <div className="flex justify-end gap-1 mt-2 grid grid-cols-2 gap-2">
-                            <button
-                                onClick={() => openModal(test.id)}
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                            >
-                                Delete
-                            </button>
-                            <button
-                                onClick={() => navigate(`/edit/${test.id}`)}
-                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                            >
-                                Edit
-                            </button>
+                        <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1">
+                                <span
+                                    className="text-lg font-medium break-words"
+                                    style={{
+                                        color: "black",
+                                        whiteSpace: "pre-wrap",
+                                        wordBreak: "break-word",
+                                        overflowWrap: "break-word",
+                                        hyphens: "auto",
+                                    }}
+                                >
+                                    {test.name}
+                                </span>
+                                <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
+                                    <HelpCircle size={14} />
+                                    <span>{test.questions?.length || 0} questions</span>
+                                </div>
+                            </div>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => openModal(test.id)}
+                                    className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                                    title="Delete test"
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+                                <button
+                                    onClick={() => navigate(`/edit/${test.id}`)}
+                                    className="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
+                                    title="Edit test"
+                                >
+                                    <Pencil size={20} />
+                                </button>
+                            </div>
                         </div>
                     </li>
                 ))}
@@ -147,7 +147,6 @@ function TestList({ tgUser }) {
                 )}
             </ul>
 
-            {/* Кнопка "Create Test" */}
             <button
                 onClick={() => !isLimitReached && navigate("/create")}
                 disabled={isLimitReached}
@@ -159,11 +158,10 @@ function TestList({ tgUser }) {
                 {isLimitReached ? "To create a test delete one" : "Create Test"}
             </button>
 
-            {/* Окно подтверждения удаления */}
             <DeleteConfirmation
                 isOpen={isModalOpen}
                 onConfirm={handleDelete}
-                onCancel={closeModal}
+                onCancel={closeModal} 
             />
         </div>
     );

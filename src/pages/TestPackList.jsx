@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
-import { Share2 } from "lucide-react";
+import { Share2, Pencil, Trash2} from "lucide-react";
 
 import { testPacksApi } from "../api/testPacksApi";
 import { BOT_USERNAME } from "../api/constants";
@@ -66,6 +66,28 @@ function TestPackList({ creatorId }) {
         }
     }
 
+    const handleShare = async (packID) => {
+        const link = `https://t.me/${BOT_USERNAME}?start=${packID}`;
+        try {
+            await navigator.clipboard.writeText(link);
+            window.Telegram.WebApp.showPopup({
+                message: "Ссылка скопирована в буфер обмена",
+                buttons: [{ type: 'close' }]
+            });
+        } catch (err) {
+            console.error("Failed to copy link:", err);
+            window.Telegram.WebApp.showPopup({
+                message: "Произошла ошибка при копировании ссылки",
+                buttons: [{ type: 'close' }]
+            });
+        }
+    };
+
+    if (isLoading) return <LoadingSpinner />;
+
+    const MAX_PACKS = 10;
+    const isLimitReached = packs.length >= MAX_PACKS;
+
     const openModal = (packId) => {
         setPackToDelete(packId);
         setModalOpen(true);
@@ -88,34 +110,6 @@ function TestPackList({ creatorId }) {
         }
     };
 
-    const handleShare = async (packID) => {
-        const link = `https://t.me/${BOT_USERNAME}?start=${packID}`;
-        try {
-            await navigator.clipboard.writeText(link);
-            // alert("Link copied to clipboard!");
-            window.Telegram.WebApp.showPopup({
-                // title: "Мой заголовок",
-                message: "Ссылка скопирована в буфер обмена",
-                buttons: [{ type: 'close' }]
-            });
-        } catch (err) {
-            console.error("Failed to copy link:", err);
-            // alert("Copy link failed. See console for details.");
-            window.Telegram.WebApp.showPopup({
-                // title: "Мой заголовок",
-                message: "Произошла ошибка при копировании ссылки",
-                buttons: [{ type: 'close' }]
-            });
-        }
-    };
-
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
-
-    const MAX_PACKS = 10;
-    const isLimitReached = packs.length >= MAX_PACKS;
-
     return (
         <div className="p-2 max-w-2xl mx-auto">
             <h1 className="text-2xl font-bold mb-6 text-center">My Test Packs</h1>
@@ -124,46 +118,54 @@ function TestPackList({ creatorId }) {
                 {packs.map((pack) => (
                     <li
                         key={pack.id}
-                        className="flex flex-col p-4 border rounded shadow-sm bg-white"
+                        className="flex flex-col p-4 border rounded shadow-sm bg-white hover:shadow-md transition-shadow"
                     >
-                        <div className="flex items-center justify-between gap-2">
-                            <span
-                                className="text-lg font-medium mb-3 break-words"
-                                style={{
-                                    color: "black",
-                                    whiteSpace: "pre-wrap",
-                                    wordBreak: "break-word",
-                                    overflowWrap: "break-word",
-                                    hyphens: "auto",   // <--- разрешаем автоматические переносы
-                                }}
-                            >
-                                {pack.name}
-                            </span>
-                            <button
-                                onClick={() => handleShare(pack.id)}
-                                className="px-2 py-1 border border-blue-500 text-blue-500 
-                             rounded-sm text-xs hover:bg-blue-500 hover:text-white 
-                             flex items-center gap-1"
-                                title="Copy link to clipboard"
-                            >
-                                <Share2 size={14} />
-                                Share
-                            </button>
-                        </div>
-
-                        <div className="flex justify-end gap-1 mt-2 grid grid-cols-2 gap-2">
-                            <button
-                                onClick={() => openModal(pack.id)}
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                            >
-                                Delete
-                            </button>
-                            <button
-                                onClick={() => navigate(`/packs/edit/${pack.id}`)}
-                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                            >
-                                Edit
-                            </button>
+                        <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1">
+                                <span
+                                    className="text-lg font-medium break-words"
+                                    style={{
+                                        color: "black",
+                                        whiteSpace: "pre-wrap",
+                                        wordBreak: "break-word",
+                                        overflowWrap: "break-word",
+                                        hyphens: "auto",
+                                    }}
+                                >
+                                    {pack.name}
+                                </span>
+                                <div className="flex flex-col gap-1 mt-2 text-sm text-gray-500">
+                                    <div className="flex items-center gap-1">
+                                        <span>{pack.tests?.length || 0} psychological tests</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <span>{pack.custom_tests?.length || 0} custom tests</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => handleShare(pack.id)}
+                                    className="p-2 text-green-500 hover:bg-green-50 rounded-full transition-colors"
+                                    title="Share pack"
+                                >
+                                    <Share2 size={20} />
+                                </button>
+                                <button
+                                    onClick={() => openModal(pack.id)}
+                                    className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                                    title="Delete pack"
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+                                <button
+                                    onClick={() => navigate(`/packs/edit/${pack.id}`)}
+                                    className="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
+                                    title="Edit pack"
+                                >
+                                    <Pencil size={20} />
+                                </button>
+                            </div>
                         </div>
                     </li>
                 ))}
