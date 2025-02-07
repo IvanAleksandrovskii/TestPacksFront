@@ -8,7 +8,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     environment:
-      - VITE_APP_API_BASE_URL=${VITE_APP_API_BASE_URL:-https://wlgq9x-ip-184-22-35-246.tunnelmole.net}
+      - VITE_APP_API_BASE_URL=${VITE_APP_API_BASE_URL:-https://dkjsyk-ip-184-22-35-246.tunnelmole.net}
       - VITE_APP_BOT_USERNAME=${VITE_APP_BOT_USERNAME:-my_demo_bb_bot}
-      - VITE_APP_HOST=${VITE_APP_HOST:-c216-184-22-35-246.ngrok-free.app}
+      - VITE_APP_HOST=${VITE_APP_HOST:-4d23-184-22-35-246.ngrok-free.app}
     restart: always
