@@ -197,7 +197,7 @@ const QuizForm = ({
                 <div>
                     <div ref={nameRef /* Привязываем ref */}>
                         <div className="flex justify-between items-center">
-                            <label className="block text-sm font-medium">Test Name:</label>
+                            <label className="block text-sm font-medium">Название теста:</label>
                             <p className="text-gray-500 text-[12px] mb-1">
                                 Отображается для пользователей
                             </p>
@@ -210,7 +210,7 @@ const QuizForm = ({
                             onChange={(e) => setName(e.target.value)}
                             onBlur={() => setTouched({ ...touched, name: true })}
                             className={`w-full p-2 border rounded ${touched.name && errors.name ? 'border-red-500' : 'border-gray-300'}`}
-                            placeholder="Enter your test name"
+                            placeholder="Введите название теста"
                         />
                         <ErrorMessage message={touched.name && errors.name} />
                     </div>
@@ -219,7 +219,7 @@ const QuizForm = ({
                 <div>
                     <div ref={descriptionRef /* Привязываем ref */}>
                         <div className="flex justify-between items-center">
-                            <label className="block text-sm font-medium">Description:</label>
+                            <label className="block text-sm font-medium">Описание:</label>
                             <p className="text-gray-500 text-[12px] mb-1">
                                 Отображается для пользователей
                             </p>
@@ -230,14 +230,14 @@ const QuizForm = ({
                             onChange={(e) => setDescription(e.target.value)}
                             onBlur={() => setTouched({ ...touched, description: true })}
                             className={`w-full p-2 border rounded ${touched.description && errors.description ? 'border-red-500' : 'border-gray-300'}`}
-                            placeholder="Enter your test description"
+                            placeholder="Введите описание теста"
                         />
                         <ErrorMessage message={touched.description && errors.description} />
                     </div>
                 </div>
 
                 <div className="space-y-6">
-                    <h2 className="text-xl font-semibold">Questions</h2>
+                    <h2 className="text-xl font-semibold">Вопросы</h2>
                     {questions.map((question, qIndex) => (
                         <div
                             key={qIndex}
@@ -250,7 +250,7 @@ const QuizForm = ({
                         >
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Question {qIndex + 1}:</label>
+                                    <label className="block text-sm font-medium mb-1">Вопрос {qIndex + 1}:</label>
                                     <textarea
                                         style={{ color: 'black' }}
                                         value={question.question_text}
@@ -268,7 +268,7 @@ const QuizForm = ({
                                         }}
                                         className="w-full p-2 border rounded"
                                         rows={3}
-                                        placeholder="Enter your question text"
+                                        placeholder="Введите текст вопроса"
                                     />
                                     <ErrorMessage
                                         message={touched.questions?.[qIndex]?.question_text && errors.questions?.[qIndex]?.question_text}
@@ -328,7 +328,7 @@ const QuizForm = ({
                                                     setQuestions(updated);
                                                 }}
                                                 className="flex-1 p-2 border rounded min-w-[150px]"
-                                                placeholder="Answer text"
+                                                placeholder="Текст ответа"
                                             />
                                             <input
                                                 type="number"
@@ -343,8 +343,8 @@ const QuizForm = ({
                                                     setQuestions(updated);
                                                 }}
                                                 className="p-2 border rounded"
-                                                placeholder="Sc" // короткий placeholder, напр. "Sc" вместо "Score"
-                                                title="Enter the score value"
+                                                placeholder="Балл"
+                                                title="Введите балл за ответ"
                                             />
                                             {!(question.isTestFormat && question.answers.length === 1) && (
                                                 <button
@@ -375,7 +375,7 @@ const QuizForm = ({
                                                 }}
                                                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 col-span-2"
                                             >
-                                                Add Answer
+                                                Добавить ответ
                                             </button>
                                         </div>
                                     )}
@@ -385,7 +385,7 @@ const QuizForm = ({
                                                 onClick={() => removeQuestion(qIndex)}
                                                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 col-span-2 mt-2"
                                             >
-                                                Remove Question
+                                                Удалить вопрос
                                             </button>
                                         </div>
                                     )}

@@ -145,17 +145,17 @@ function TestPackFormTwoGroups({
     return (
         <div className="p-6 max-w-4xl mx-auto">
             <h2 className="text-xl font-bold mb-4">
-                {isEdit ? "Edit Test Pack" : "Create New Test Pack"}
+                {isEdit ? "Обновить набор тестов" : "Создать новый набор тестов"}
             </h2>
 
             {/* Поле имени */}
             <div className="mb-4" ref={packNameRef}>
-                <label className="block mb-1 font-medium">Pack Name:</label>
+                <label className="block mb-1 font-medium">Название:</label>
                 <input
                     type="text"
                     style={{ color: "black" }}
                     className={`w-full p-2 border rounded ${nameError ? "border-red-500" : "border-gray-300"}`}
-                    placeholder="Enter pack name"
+                    placeholder="Введите название набора тестов"
                     value={packName}
                     onChange={(e) => setPackName(e.target.value)}
                 />
@@ -171,13 +171,13 @@ function TestPackFormTwoGroups({
                     style={{ border: "1px solid rgb(0, 0, 0)" }}
                     onClick={() => setPsychoExpanded(!psychoExpanded)}
                 >
-                    <span className="font-semibold text-black">Psychological Tests</span>
+                    <span className="font-semibold text-black">Психологические тесты</span>
                     <span className="text-black">{psychoExpanded ? "▲" : "▼"}</span>
                 </div>
                 {psychoExpanded && (
                     <div className="p-2 bg-white">
                         {psychoTests.length === 0 && (
-                            <p className="text-gray-500">No tests</p>
+                            <p className="text-gray-500">Нет тестов</p>
                         )}
                         {psychoTests.map((test) => (
                             <TestItem
@@ -199,13 +199,13 @@ function TestPackFormTwoGroups({
                     style={{ border: "1px solid rgb(0, 0, 0)" }}
                     onClick={() => setCustomExpanded(!customExpanded)}
                 >
-                    <span className="font-semibold text-black">Custom Tests</span>
+                    <span className="font-semibold text-black">Кастомные тесты</span>
                     <span className="text-black">{customExpanded ? "▲" : "▼"}</span>
                 </div>
                 {customExpanded && (
                     <div className="p-2 bg-white">
                         {customTests.length === 0 && (
-                            <p className="text-gray-500">No tests</p>
+                            <p className="text-gray-500">Нет тестов</p>
                         )}
                         {customTests.map((test) => (
                             <TestItem
@@ -229,7 +229,7 @@ function TestPackFormTwoGroups({
                     onClick={handleSubmit}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 >
-                    {isEdit ? "Save Changes" : "Create Pack"}
+                    {isEdit ? "Сохранить изменения" : "Создать набор"}
                 </button>
             </div>
 
@@ -250,11 +250,11 @@ function TestPackFormTwoGroups({
                                 onClick={closeModal}
                                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 w-full"
                             >
-                                Close
+                                Закрыть
                             </button>
                         </>
                     ) : (
-                        <p>No data</p>
+                        <p>Нет данных</p>
                     )}
                 </div>
             </Modal>

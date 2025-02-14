@@ -46,7 +46,7 @@ const EditQuiz = ({ creatorId }) => {
             navigate("/tests");
         } catch (error) {
             console.error("Failed to update test", error);
-            alert('Failed to update test. Please try again.');
+            alert('Произошла ошибка при обновлении теста. Попробуйте позже.');
         }
     };
 
@@ -59,12 +59,12 @@ const EditQuiz = ({ creatorId }) => {
     }
 
     if (!initialData) {
-        return <div className="text-center text-gray-500 mt-8">Test not found</div>;
+        return <div className="text-center text-gray-500 mt-8">Тест не найден</div>;
     }
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-6 text-center">Edit Test</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">Обновить тест</h1>
             <QuizForm
                 initialName={initialData.name}
                 initialDescription={initialData.description}

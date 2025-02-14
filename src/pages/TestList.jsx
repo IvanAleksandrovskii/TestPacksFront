@@ -91,7 +91,7 @@ function TestList({ tgUser }) {
 
     if (isLoading) return (
         <div className="p-2 max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6 text-center">My Tests</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">Мои тесты</h1>
             <LoadingSpinner />
         </div>
     );
@@ -101,7 +101,7 @@ function TestList({ tgUser }) {
 
     return (
         <div className="p-2 max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6 text-center">My Tests</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">Мои тесты</h1>
 
             <ul className="space-y-4">
                 {tests.map((test) => (
@@ -125,7 +125,7 @@ function TestList({ tgUser }) {
                                 </span>
                                 <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
                                     <HelpCircle size={14} />
-                                    <span>{test.questions?.length || 0} questions</span>
+                                    <span>Вопросов: {test.questions?.length || 0}</span>
                                 </div>
                             </div>
                             <div className="flex gap-2">
@@ -148,7 +148,7 @@ function TestList({ tgUser }) {
                     </li>
                 ))}
                 {tests.length === 0 && (
-                    <p className="text-center text-gray-500">No tests created yet</p>
+                    <p className="text-center text-gray-500">Нет созданных тестов</p>
                 )}
             </ul>
 
@@ -160,7 +160,7 @@ function TestList({ tgUser }) {
                     : "bg-blue-500 hover:bg-blue-600"
                     }`}
             >
-                {isLimitReached ? "To create a test delete one" : "Create Test"}
+                {isLimitReached ? "To create a test delete one" : "Создать тест"}
             </button>
 
             <DeleteConfirmation

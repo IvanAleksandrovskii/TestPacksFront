@@ -51,7 +51,7 @@ function EditTestPack() {
             setPsychoTests(psycho);
             setCustomTests(custom);
         } catch (err) {
-            console.error("Error loading pack data:", err);
+            console.error("Error loading pack data");
         } finally {
             setLoading(false);
         }
@@ -68,7 +68,7 @@ function EditTestPack() {
             navigate("/test_packs");
         } catch (err) {
             console.error("Error updating pack:", err);
-            alert("Error updating test pack. See console.");
+            alert("Произошла ошибка при обновлении набора тестов. Попробуйте позже.");
         }
     };
 

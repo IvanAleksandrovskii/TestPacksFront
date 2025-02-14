@@ -85,7 +85,7 @@ function TestPackList({ creatorId }) {
 
     if (isLoading) return (
         <div className="p-2 max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6 text-center">My Test Packs</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">Мои наборы тестов</h1>
             <LoadingSpinner />
         </div>
     );
@@ -117,7 +117,7 @@ function TestPackList({ creatorId }) {
 
     return (
         <div className="p-2 max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6 text-center">My Test Packs</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">Мои наборы тестов</h1>
 
             <ul className="space-y-4">
                 {packs.map((pack) => (
@@ -182,7 +182,7 @@ function TestPackList({ creatorId }) {
                     </li>
                 ))}
                 {packs.length === 0 && (
-                    <p className="text-center text-gray-500">No test packs created yet</p>
+                    <p className="text-center text-gray-500">Нет созданных наборов тестов</p>
                 )}
             </ul>
 
@@ -194,7 +194,7 @@ function TestPackList({ creatorId }) {
                     : "bg-blue-500 hover:bg-blue-600"
                     }`}
             >
-                {isLimitReached ? "To create a pack delete one" : "Create Test Pack"}
+                {isLimitReached ? "To create a pack delete one" : "Создать набор"}
             </button>
 
             <DeleteConfirmation
