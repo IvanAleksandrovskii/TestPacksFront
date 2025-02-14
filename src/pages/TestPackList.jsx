@@ -158,14 +158,20 @@ function TestPackList({ creatorId }) {
                             <div className="grid grid-cols-2 gap-2 items-center">
                                 {/* Кнопки "Удалить" и "Редактировать" в одной строке */}
                                 <button
-                                    onClick={() => openModal(pack.id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        openModal(pack.id);
+                                    }}
                                     className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                                     title="Delete pack"
                                 >
                                     <Trash2 size={20} />
                                 </button>
                                 <button
-                                    onClick={() => navigate(`/packs/edit/${pack.id}`)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/packs/edit/${pack.id}`);
+                                        }}
                                     className="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
                                     title="Edit pack"
                                 >
@@ -174,7 +180,10 @@ function TestPackList({ creatorId }) {
 
                                 {/* Кнопка "Поделиться" на всю ширину (col-span-2) */}
                                 <button
-                                    onClick={() => handleShare(pack.id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleShare(pack.id);
+                                    }}
                                     className="pt-1 pb-1 pr-2 pl-2 text-green-500 border border-green-500 hover:bg-green-50 rounded-full transition-colors flex items-center justify-center gap-2 col-span-2"
                                     title="Share pack"
                                 >

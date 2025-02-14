@@ -136,14 +136,20 @@ function TestList({ tgUser }) {
                             </div>
                             <div className="flex gap-2">
                                 <button
-                                    onClick={() => openModal(test.id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        openModal(test.id);
+                                    }}
                                     className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                                     title="Delete test"
                                 >
                                     <Trash2 size={20} />
                                 </button>
                                 <button
-                                    onClick={() => navigate(`/edit/${test.id}`)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/edit/${test.id}`);
+                                    }}
                                     className="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
                                     title="Edit test"
                                 >
