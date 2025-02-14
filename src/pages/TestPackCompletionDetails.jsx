@@ -304,7 +304,7 @@ const TestPackCompletionDetails = ({ tgUser }) => {
                             ? "Завершено"
                             : completion.status === "ABANDONED"
                                 ? "Отменено"
-                                : "В процессе"}
+                                : "В\u00A0процессе"}
                     </span>
                 </div>
                 <div className="flex justify-between items-center mt-2">

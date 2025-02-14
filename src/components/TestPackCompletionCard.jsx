@@ -77,16 +77,20 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
                         <h3 className="text-lg font-bold text-gray-800 truncate pr-2">
                             {completion.test_pack_name}
                         </h3>
-                        <p
-                            className={`px-2 py-1 rounded text-xs font-medium ${completion.status === "COMPLETED"
+                        <span
+                            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${completion.status === "COMPLETED"
                                 ? "bg-green-100 text-green-800"
                                 : completion.status === "ABANDONED"
                                     ? "bg-red-100 text-red-800"
                                     : "bg-blue-100 text-blue-800"
                                 }`}
                         >
-                            {completion.status.toLowerCase().replace('_', ' ')}
-                        </p>
+                            {completion.status === "COMPLETED"
+                                ? "Завершено"
+                                : completion.status === "ABANDONED"
+                                    ? "Отменено"
+                                    : "В\u00A0процессе"}
+                        </span>
                     </div>
 
                     <div className="flex justify-between items-center mt-2">
