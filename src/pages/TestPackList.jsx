@@ -9,6 +9,8 @@ import { testPacksApi } from "../api/testPacksApi";
 import { BOT_USERNAME } from "../api/constants";
 import LoadingSpinner from "../components/LoadingSpinner";
 
+import TestDetailsView from "../components/TestDetailsView";
+
 
 Modal.setAppElement("#root");
 
@@ -48,6 +50,8 @@ function TestPackList({ creatorId }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setModalOpen] = useState(false);
     const [packToDelete, setPackToDelete] = useState(null);
+
+    const [selectedPack, setSelectedPack] = useState(null);
 
     useEffect(() => {
         if (!creatorId) return;
@@ -123,6 +127,7 @@ function TestPackList({ creatorId }) {
                 {packs.map((pack) => (
                     <li
                         key={pack.id}
+                        onClick={() => setSelectedPack(pack)}
                         className="flex flex-col p-4 border rounded shadow-sm bg-white hover:shadow-md transition-shadow"
                     >
                         <div className="flex items-center">
@@ -202,6 +207,14 @@ function TestPackList({ creatorId }) {
                 onConfirm={handleDelete}
                 onCancel={closeModal}
             />
+
+            <TestDetailsView
+                isOpen={!!selectedPack}
+                onClose={() => setSelectedPack(null)}
+                data={selectedPack}
+                type="pack"
+            />
+
         </div>
     );
 }

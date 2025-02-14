@@ -6,6 +6,8 @@ import { Pencil, Trash2, HelpCircle } from "lucide-react";
 import { quizApi } from "../api/quizApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 
+import TestDetailsView from "../components/TestDetailsView";
+
 Modal.setAppElement("#root");
 
 const DeleteConfirmation = ({ isOpen, onConfirm, onCancel }) => (
@@ -46,6 +48,9 @@ function TestList({ tgUser }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setModalOpen] = useState(false);
     const [testToDelete, setTestToDelete] = useState(null);
+
+    const [selectedTest, setSelectedTest] = useState(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -107,6 +112,7 @@ function TestList({ tgUser }) {
                 {tests.map((test) => (
                     <li
                         key={test.id}
+                        onClick={() => setSelectedTest(test)}
                         className="flex flex-col p-4 border rounded shadow-sm bg-white hover:shadow-md transition-shadow"
                     >
                         <div className="flex items-start justify-between gap-2">
@@ -168,6 +174,14 @@ function TestList({ tgUser }) {
                 onConfirm={handleDelete}
                 onCancel={closeModal}
             />
+
+            <TestDetailsView
+                isOpen={!!selectedTest}
+                onClose={() => setSelectedTest(null)}
+                data={selectedTest}
+                type="test"
+            />
+
         </div>
     );
 }
