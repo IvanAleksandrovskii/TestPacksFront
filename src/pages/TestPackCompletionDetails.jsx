@@ -24,7 +24,7 @@ const PsychoTestCard = ({ test }) => {
                 <div>
                     <h3 className="text-lg font-semibold">{test.name}</h3>
                     <div className="text-sm text-gray-500">
-                        Завершён: {format(new Date(test.completed_at), "dd MMM yyyy HH:mm", { locale: ru })}
+                        Завершён: {format(normalizeDate(test.completed_at), "dd MMM yyyy HH:mm", { locale: ru })}
                     </div>
                 </div>
                 {/* Индикатор разворота */}
@@ -45,6 +45,19 @@ const PsychoTestCard = ({ test }) => {
     );
 };
 
+
+// Утилита для нормализации даты
+const normalizeDate = (dateString) => {
+    if (!dateString) return new Date();
+
+    // Если строка даты не заканчивается на Z и не содержит +, добавляем UTC
+    if (!dateString.endsWith('Z') && !dateString.includes('+')) {
+        return new Date(dateString + '+00:00');
+    }
+    return new Date(dateString);
+};
+
+
 const CustomTestCard = ({ test }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -58,7 +71,7 @@ const CustomTestCard = ({ test }) => {
                 <div>
                     <h3 className="text-lg font-semibold">{test.name}</h3>
                     <div className="text-sm text-gray-500">
-                        Завершён: {format(new Date(test.completed_at), "dd MMM yyyy HH:mm", { locale: ru })}
+                        Завершён: {format(normalizeDate(test.completed_at), "dd MMM yyyy HH:mm", { locale: ru })}
                     </div>
                 </div>
                 {/* Индикатор разворота */}
@@ -79,7 +92,7 @@ const CustomTestCard = ({ test }) => {
                                         <div className="font-medium text-sm">{answer.question_text}</div>
                                         <div className="text-sm mt-1">{answer.answer_text}</div>
                                         <div className="text-xs text-gray-500 mt-1">
-                                            {format(new Date(answer.timestamp), "dd MMM yyyy HH:mm:ss", { locale: ru })}
+                                            {format(normalizeDate(answer.timestamp), "dd MMM yyyy HH:mm:ss", { locale: ru })}
                                         </div>
                                     </div>
                                 ))}
@@ -95,7 +108,7 @@ const CustomTestCard = ({ test }) => {
                                         <div className="text-sm mt-1">{answer.answer_text}</div>
                                         <div className="flex justify-between items-center mt-1">
                                             <div className="text-xs text-gray-500">
-                                                {format(new Date(answer.timestamp), "dd MMM yyyy HH:mm:ss", { locale: ru })}
+                                                {format(normalizeDate(answer.timestamp), "dd MMM yyyy HH:mm:ss", { locale: ru })}
                                             </div>
                                             {answer.score !== null && (
                                                 <div className={`text-sm font-medium ${answer.score >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -135,7 +148,7 @@ const renderValue = (value) => {
     return value === "Не указано" ? "" : value;
 };
 
-const TestPackCompletionDetails = ( { tgUser } ) => {
+const TestPackCompletionDetails = ({ tgUser }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { completion, filters } = location.state || {};
@@ -259,7 +272,7 @@ const TestPackCompletionDetails = ( { tgUser } ) => {
             console.error("Ошибка при удалении информации о результатах:", err);
         }
     };
-    
+
     const handleGetAiTranscription = async () => {
         try {
             const data = await testPacksApi.getAITrancription(tgUser.id, completion.id);
@@ -274,9 +287,9 @@ const TestPackCompletionDetails = ( { tgUser } ) => {
             <div className="mb-6">
                 <h1 className="text-2xl font-bold mb-2">{completion.test_pack_name}</h1>
                 <div className="flex gap-4 text-sm text-gray-600">
-                    <span>Создан: {format(new Date(completion.created_at), "dd MMM yyyy HH:mm", { locale: ru })}</span>
+                    <span>Создан: {format(normalizeDate(completion.created_at), "dd MMM yyyy HH:mm", { locale: ru })}</span>
                     <span>•</span>
-                    <span>Обновлён: {format(new Date(completion.updated_at), "dd MMM yyyy HH:mm", { locale: ru })}</span>
+                    <span>Обновлён: {format(normalizeDate(completion.updated_at), "dd MMM yyyy HH:mm", { locale: ru })}</span>
                 </div>
                 <div className="mt-2">
                     <span
