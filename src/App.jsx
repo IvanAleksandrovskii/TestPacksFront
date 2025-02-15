@@ -1,3 +1,5 @@
+// src/App.jsx
+
 import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
@@ -15,11 +17,9 @@ import TestPackList from './pages/TestPackList';
 import Layout from './components/Layout';
 import CreateTestPack from './pages/CreateTestPack';
 import EditTestPack from './pages/EditTestPack';
-
 import Home from './pages/Home';
 
 import TestPackCompletionsPage from './pages/TestPackCompletionsPage';
-
 import TestPackCompletionDetails from './pages/TestPackCompletionDetails';
 
 
@@ -34,6 +34,14 @@ function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // При переходе на другую страницу скроллим вверх
+  useEffect(() => {
+    const appContainer = document.querySelector('.app-container');
+    if (appContainer) {
+      appContainer.scrollTop = 0;
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     try {
