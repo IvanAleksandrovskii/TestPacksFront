@@ -48,8 +48,9 @@ function TestList({ tgUser }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setModalOpen] = useState(false);
     const [testToDelete, setTestToDelete] = useState(null);
-
     const [selectedTest, setSelectedTest] = useState(null);
+
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
@@ -61,6 +62,7 @@ function TestList({ tgUser }) {
                 setTests(response);
             } catch (error) {
                 console.error("Failed to fetch tests", error);
+                setError("Произошла ошибка при загрузке данных. Попробуйте позже.");
             } finally {
                 setIsLoading(false);
             }
@@ -98,6 +100,13 @@ function TestList({ tgUser }) {
         <div className="p-2 max-w-2xl mx-auto">
             <h1 className="text-2xl font-bold mb-6 text-center">Мои тесты</h1>
             <LoadingSpinner />
+        </div>
+    );
+
+    if (error) return (
+        <div className="p-2 max-w-2xl mx-auto">
+            <h1 className="text-2xl font-bold mb-6 text-center">Мои тесты</h1>
+            <div className="text-red-500 text-center p-4">{error}</div>
         </div>
     );
 

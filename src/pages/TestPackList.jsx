@@ -50,8 +50,10 @@ function TestPackList({ creatorId }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setModalOpen] = useState(false);
     const [packToDelete, setPackToDelete] = useState(null);
-
     const [selectedPack, setSelectedPack] = useState(null);
+
+    const [error, setError] = useState(null);
+
 
     useEffect(() => {
         if (!creatorId) return;
@@ -65,6 +67,7 @@ function TestPackList({ creatorId }) {
             setPacks(data);
         } catch (error) {
             console.error("Failed to fetch test packs:", error);
+            setError("Произошла ошибка при загрузке данных. Попробуйте позже.");
         } finally {
             setIsLoading(false);
         }
@@ -91,6 +94,13 @@ function TestPackList({ creatorId }) {
         <div className="p-2 max-w-2xl mx-auto">
             <h1 className="text-2xl font-bold mb-6 text-center">Мои наборы тестов</h1>
             <LoadingSpinner />
+        </div>
+    );
+
+    if (error) return (
+        <div className="p-2 max-w-2xl mx-auto">
+            <h1 className="text-2xl font-bold mb-6 text-center">Мои наборы тестов</h1>
+            <div className="text-red-500 text-center p-4">{error}</div>
         </div>
     );
 
@@ -171,7 +181,7 @@ function TestPackList({ creatorId }) {
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         navigate(`/packs/edit/${pack.id}`);
-                                        }}
+                                    }}
                                     className="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
                                     title="Edit pack"
                                 >
