@@ -11,12 +11,23 @@ const NavigationPanel = ({ isDarkMode }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const handleNavigation = (path) => {
+    // Проверяем доступность Telegram WebApp
+    const tg = window?.Telegram?.WebApp;
+    if (tg) {
+      // Вызываем импульс вибрации
+      tg.HapticFeedback.impactOccurred('light');
+    }
+    
+    navigate(path);
+  };
+
   return (
     <div className={`fixed bottom-0 left-0 right-0 h-18 ${isDarkMode ? 'bg-black border-gray-700' : 'bg-white border-gray-200'
       } border-t safe-bottom`}>
       <div className="flex justify-around w-full max-w-md mx-auto h-full">
         <button
-          onClick={() => navigate('/tests')}
+          onClick={() => handleNavigation('/tests')}
           className={`flex flex-col items-center justify-center w-20 h-full ${location.pathname === '/tests' ? 'text-blue-600' : isDarkMode ? 'text-gray-300' : 'text-gray-600'
             } hover:text-blue-400 transition-colors`}
         >
@@ -24,7 +35,7 @@ const NavigationPanel = ({ isDarkMode }) => {
           <span className="text-xs mt-1">Тесты</span>
         </button>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => handleNavigation('/')}
           className={`flex flex-col items-center justify-center w-20 h-full ${location.pathname === '/' ? 'text-blue-600' : isDarkMode ? 'text-gray-300' : 'text-gray-600'
             } hover:text-blue-400 transition-colors`}
         >
@@ -32,7 +43,7 @@ const NavigationPanel = ({ isDarkMode }) => {
           <span className="text-xs mt-1">Home</span>
         </button>
         <button
-          onClick={() => navigate('/test_packs')}
+          onClick={() => handleNavigation('/test_packs')}
           className={`flex flex-col items-center justify-center w-20 h-full ${location.pathname === '/test_packs' ? 'text-blue-600' : isDarkMode ? 'text-gray-300' : 'text-gray-600'
             } hover:text-blue-400 transition-colors`}
         >
@@ -40,7 +51,7 @@ const NavigationPanel = ({ isDarkMode }) => {
           <span className="text-xs mt-1">Наборы</span>
         </button>
         <button
-          onClick={() => navigate('/test-completions')}
+          onClick={() => handleNavigation('/test-completions')}
           className={`flex flex-col items-center justify-center w-20 h-full ${location.pathname === '/test-completions' ? 'text-blue-600' : isDarkMode ? 'text-gray-300' : 'text-gray-600'
             } hover:text-blue-400 transition-colors`}
         >
