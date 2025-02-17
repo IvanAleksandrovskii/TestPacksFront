@@ -19,6 +19,12 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
     const phone = renderValue(userData.phone);
 
     const handleCopyUsername = async (e) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         e.stopPropagation();
         try {
             await navigator.clipboard.writeText(username);
@@ -45,6 +51,12 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
     };
 
     const handleCopyPhone = async (e) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         e.stopPropagation();
         try {
             await navigator.clipboard.writeText(phone);
@@ -62,6 +74,12 @@ const TestPackCompletionCard = ({ completion, onClick }) => {
     };
 
     const handleUsernameClick = (e) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         e.stopPropagation();
         setUsernameModalOpen(true);
     };

@@ -80,6 +80,13 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     }, [activeTab, selectedTestPack, pageSize, currentPage, tgUser, isInitialized]);
 
     const handleTabChange = (event, newValue) => {
+
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         setActiveTab(newValue);
         setCurrentPage(1);
         setSelectedTestPack("");
@@ -96,10 +103,23 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
     };
 
     const handlePageClick = (event) => {
+
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         setCurrentPage(event.selected + 1);
     };
 
     const handleCardClick = (completion) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         navigate(`/test-completions/${completion.test_pack_id}`, {
             state: {
                 completion,

@@ -74,6 +74,13 @@ function TestPackList({ creatorId }) {
     }
 
     const handleShare = async (packID) => {
+
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         const link = `https://t.me/${BOT_USERNAME}?start=${packID}`;
         try {
             await navigator.clipboard.writeText(link);
@@ -108,6 +115,13 @@ function TestPackList({ creatorId }) {
     const isLimitReached = packs.length >= MAX_PACKS;
 
     const openModal = (packId) => {
+
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         setPackToDelete(packId);
         setModalOpen(true);
     };
@@ -118,6 +132,12 @@ function TestPackList({ creatorId }) {
     };
 
     const handleDelete = async () => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         if (!packToDelete) return;
         try {
             await testPacksApi.deletePack(packToDelete);
@@ -127,6 +147,17 @@ function TestPackList({ creatorId }) {
         } finally {
             closeModal();
         }
+    };
+
+    const handleNavigation = (path) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
+        // Навигация
+        navigate(path);
     };
 
     return (
@@ -180,7 +211,7 @@ function TestPackList({ creatorId }) {
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        navigate(`/packs/edit/${pack.id}`);
+                                        handleNavigation(`/packs/edit/${pack.id}`);
                                     }}
                                     className="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
                                     title="Edit pack"
@@ -211,7 +242,7 @@ function TestPackList({ creatorId }) {
             </ul>
 
             <button
-                onClick={() => !isLimitReached && navigate("/packs/create")}
+                onClick={() => !isLimitReached && handleNavigation("/packs/create")}
                 disabled={isLimitReached}
                 className={`px-4 py-2 w-full rounded mb-8 mt-4 text-white ${isLimitReached
                     ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"

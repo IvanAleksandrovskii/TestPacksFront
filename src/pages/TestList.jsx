@@ -74,6 +74,13 @@ function TestList({ tgUser }) {
     }, [tgUser]);
 
     const openModal = (testId) => {
+
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         setTestToDelete(testId);
         setModalOpen(true);
     };
@@ -84,6 +91,12 @@ function TestList({ tgUser }) {
     };
 
     const handleDelete = async () => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         if (!testToDelete) return;
         try {
             await quizApi.deleteTest(testToDelete, tgUser.id);
@@ -112,6 +125,17 @@ function TestList({ tgUser }) {
 
     const MAX_TESTS = 10;
     const isLimitReached = tests.length >= MAX_TESTS;
+
+    const handleNavigation = (path) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
+        // Навигация
+        navigate(path);
+    };
 
     return (
         <div className="p-2 max-w-2xl mx-auto">
@@ -157,7 +181,7 @@ function TestList({ tgUser }) {
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        navigate(`/edit/${test.id}`);
+                                        handleNavigation(`/edit/${test.id}`);
                                     }}
                                     className="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
                                     title="Edit test"
@@ -174,7 +198,7 @@ function TestList({ tgUser }) {
             </ul>
 
             <button
-                onClick={() => !isLimitReached && navigate("/create")}
+                onClick={() => !isLimitReached && handleNavigation("/create")}
                 disabled={isLimitReached}
                 className={`px-4 py-2 w-full rounded mb-8 mt-4 text-white ${isLimitReached
                     ? "bg-gray-500 cursor-not-allowed hover:bg-gray-600"

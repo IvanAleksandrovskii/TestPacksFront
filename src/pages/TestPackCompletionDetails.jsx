@@ -209,6 +209,12 @@ const TestPackCompletionDetails = ({ tgUser }) => {
     const customTests = completion.completed_tests.filter(test => test.type === 'custom');
 
     const handleCopyUsername = async (e) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         e.stopPropagation();
         try {
             await navigator.clipboard.writeText(username);
@@ -235,6 +241,12 @@ const TestPackCompletionDetails = ({ tgUser }) => {
     };
 
     const handleCopyPhone = async (e) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         e.stopPropagation();
         try {
             await navigator.clipboard.writeText(phone);
@@ -252,11 +264,23 @@ const TestPackCompletionDetails = ({ tgUser }) => {
     };
 
     const handleUsernameClick = (e) => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         e.stopPropagation();
         setUsernameModalOpen(true);
     };
 
     const handleClearAiTranscription = async () => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         try {
             await testPacksApi.clearAITranscription(tgUser.id, completion.id);
             if (window.Telegram?.WebApp?.showPopup) {
@@ -274,6 +298,12 @@ const TestPackCompletionDetails = ({ tgUser }) => {
     };
 
     const handleGetAiTranscription = async () => {
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         try {
             const data = await testPacksApi.getAITrancription(tgUser.id, completion.id);
             setAiTranscription(data);

@@ -47,7 +47,7 @@ const NavigationPanel = ({ isDarkMode }) => {
 
   const handleNavigation = (path) => {
     // Сначала воспроизводим звук для мгновенной реакции
-    playSound();
+    // playSound();  // TODO: ЗВУК ОТКЛЮЧЕН, ПРОТИВНО (( ! ))
 
     // Проверяем доступность Telegram WebApp
     const tg = window?.Telegram?.WebApp;

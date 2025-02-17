@@ -1,6 +1,6 @@
 // src/components/QuizForm.jsx
 
-import React, { useState, useEffect, useRef  } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Trash2 } from 'lucide-react';
 
 import "../App.css";
@@ -101,6 +101,13 @@ const QuizForm = ({
     };
 
     const handleSubmit = async () => {
+
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         const allTouched = {
             name: true,
             description: true,
@@ -202,7 +209,7 @@ const QuizForm = ({
                                 Отображается для пользователей
                             </p>
                         </div>
-                    
+
                         <input
                             type="text"
                             style={{ color: 'black' }}
@@ -242,11 +249,10 @@ const QuizForm = ({
                         <div
                             key={qIndex}
                             ref={questionRefs[qIndex]}
-                            className={`p-4 border rounded ${
-                            touched.questions?.[qIndex] && errors.questions?.[qIndex]
-                                ? 'border-red-500'
-                                : 'border-gray-300'
-                            }`}
+                            className={`p-4 border rounded ${touched.questions?.[qIndex] && errors.questions?.[qIndex]
+                                    ? 'border-red-500'
+                                    : 'border-gray-300'
+                                }`}
                         >
                             <div className="space-y-4">
                                 <div>

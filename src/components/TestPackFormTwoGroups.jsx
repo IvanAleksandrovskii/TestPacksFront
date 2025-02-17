@@ -80,6 +80,13 @@ function TestPackFormTwoGroups({
     };
 
     const handleSubmit = () => {
+
+        // Проверяем доступность Telegram WebApp
+        const tg = window?.Telegram?.WebApp;
+        if (tg) {
+            tg.HapticFeedback.impactOccurred('light');
+        };
+
         setNameError("");
         setTestsError("");
 
@@ -114,11 +121,11 @@ function TestPackFormTwoGroups({
                         style={checkboxStyle}
                     />
                 </div>
-                <span className="flex-1" style={{ 
-                    color: "black", 
-                    whiteSpace: "pre-wrap", 
-                    wordBreak: "break-word", 
-                    overflowWrap: "break-word", 
+                <span className="flex-1" style={{
+                    color: "black",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
                     hyphens: "auto",
                     minHeight: "28px",
                     display: "flex",
