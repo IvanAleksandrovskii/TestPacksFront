@@ -14,6 +14,8 @@ function CreateTestPack({ creatorId, creatorUsername }) {
     const [psychoTests, setPsychoTests] = useState([]);
     const [customTests, setCustomTests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
 
     useEffect(() => {
         loadTests();
@@ -45,6 +47,9 @@ function CreateTestPack({ creatorId, creatorUsername }) {
     }
 
     const handleCreate = async ({ name, psychoIds, customIds }) => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         try {
             const payload = {
                 name,
@@ -54,11 +59,12 @@ function CreateTestPack({ creatorId, creatorUsername }) {
                 custom_tests: customIds,
             };
             await testPacksApi.createPack(payload);
-            // После сохранения => /test_packs
             navigate("/test_packs");
         } catch (err) {
             console.error("Error creating test pack:", err);
             alert("Error creating test pack. See console.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -70,6 +76,7 @@ function CreateTestPack({ creatorId, creatorUsername }) {
             psychoTests={psychoTests}
             customTests={customTests}
             onSubmitPack={handleCreate}
+            isSubmitting={isSubmitting}
         />
     );
 }

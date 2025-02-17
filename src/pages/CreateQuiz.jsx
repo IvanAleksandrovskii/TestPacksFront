@@ -1,6 +1,6 @@
 // src/pages/CreateQuiz.jsx
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { quizApi } from '../api/quizApi';
@@ -9,6 +9,7 @@ import QuizForm from '../components/QuizForm';
 
 const CreateQuiz = ({ tgUser }) => {
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Добавляем обработку кнопки назад
     useEffect(() => {
@@ -21,16 +22,20 @@ const CreateQuiz = ({ tgUser }) => {
     }, [navigate]);
 
     const handleSubmit = async (formData) => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         try {
             const response = await quizApi.createTest({
                 ...formData,
                 creator_id: parseInt(tgUser?.id)
             });
-            // alert(`Test created with ID: ${response.id}`);
             navigate("/tests");
         } catch (error) {
             console.error('Error creating test:', error);
             alert('Failed to create test. An error occurred. Please try again later.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -41,6 +46,7 @@ const CreateQuiz = ({ tgUser }) => {
                 onSubmit={handleSubmit}
                 allowBackOption={true}
                 buttonText="Создать тест"
+                isSubmitting={isSubmitting}
             />
         </div>
     );

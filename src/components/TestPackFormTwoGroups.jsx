@@ -21,6 +21,7 @@ function TestPackFormTwoGroups({
     psychoTests = [],       // [{id, name, description}, ...]
     customTests = [],       // [{id, name, description}, ...]
     onSubmitPack,           // (payload) => void
+    isSubmitting = false
 }) {
     const [packName, setPackName] = useState(initialPackName);
 
@@ -234,9 +235,11 @@ function TestPackFormTwoGroups({
             <div className="grid grid-cols-1 gap-1">
                 <button
                     onClick={handleSubmit}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    disabled={isSubmitting}
+                    className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600
+                        ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                    {isEdit ? "Сохранить изменения" : "Создать набор"}
+                    {isSubmitting ? 'Сохранение...' : (isEdit ? "Сохранить изменения" : "Создать набор")}
                 </button>
             </div>
 

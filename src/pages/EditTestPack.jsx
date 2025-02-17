@@ -18,6 +18,7 @@ function EditTestPack() {
     const [psychoIdsSelected, setPsychoIdsSelected] = useState([]);
     const [customIdsSelected, setCustomIdsSelected] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         loadData();
@@ -58,6 +59,9 @@ function EditTestPack() {
     }
 
     const handleUpdate = async ({ name, psychoIds, customIds }) => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         try {
             const payload = {
                 name,
@@ -69,6 +73,8 @@ function EditTestPack() {
         } catch (err) {
             console.error("Error updating pack:", err);
             alert("Произошла ошибка при обновлении набора тестов. Попробуйте позже.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -83,6 +89,7 @@ function EditTestPack() {
             psychoTests={psychoTests}
             customTests={customTests}
             onSubmitPack={handleUpdate}
+            isSubmitting={isSubmitting}
         />
     );
 }

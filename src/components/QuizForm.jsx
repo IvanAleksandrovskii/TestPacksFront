@@ -25,7 +25,8 @@ const QuizForm = ({
     onSubmit,
     allowBackOption = false,
     initialAllowBack = true,
-    buttonText = 'Save'
+    buttonText = 'Save',  // Unused
+    isSubmitting = false
 }) => {
     const [name, setName] = useState(initialName);
     const [description, setDescription] = useState(initialDescription);
@@ -250,8 +251,8 @@ const QuizForm = ({
                             key={qIndex}
                             ref={questionRefs[qIndex]}
                             className={`p-4 border rounded ${touched.questions?.[qIndex] && errors.questions?.[qIndex]
-                                    ? 'border-red-500'
-                                    : 'border-gray-300'
+                                ? 'border-red-500'
+                                : 'border-gray-300'
                                 }`}
                         >
                             <div className="space-y-4">
@@ -417,13 +418,17 @@ const QuizForm = ({
                 <div className="mt-2 grid grid-cols-2 gap-2">
                     <button
                         onClick={handleSubmit}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        disabled={isSubmitting}
+                        className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 
+                        ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        {buttonText}
+                        {isSubmitting ? 'Сохранение...' : buttonText}
                     </button>
                     <button
                         onClick={addQuestion}
-                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                        disabled={isSubmitting}
+                        className={`px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600
+                        ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         Добавить вопрос
                     </button>

@@ -14,6 +14,7 @@ const EditQuiz = ({ creatorId }) => {
     const [initialData, setInitialData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Добавляем обработку кнопки назад
     useEffect(() => {
@@ -41,12 +42,17 @@ const EditQuiz = ({ creatorId }) => {
     }, [id, creatorId]);
 
     const handleSubmit = async (formData) => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         try {
             await quizApi.updateTest(id, formData, creatorId);
             navigate("/tests");
         } catch (error) {
             console.error("Failed to update test", error);
             alert('Произошла ошибка при обновлении теста. Попробуйте позже.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -79,6 +85,7 @@ const EditQuiz = ({ creatorId }) => {
                 onSubmit={handleSubmit}
                 buttonText="Сохранить изменения"
                 allowBackOption={true}
+                isSubmitting={isSubmitting}
             />
         </div>
     );
