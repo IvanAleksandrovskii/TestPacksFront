@@ -204,7 +204,7 @@ const QuizForm = ({
                 <div>
                     <div ref={nameRef /* Привязываем ref */}>
                         <div className="flex justify-between items-center">
-                            <label className="block text-sm font-medium">Название теста:</label>
+                            <label className="block text-sm font-medium">Название:</label>
                             <p className="text-gray-500 text-[12px] mb-1">
                                 Отображается для пользователей
                             </p>
