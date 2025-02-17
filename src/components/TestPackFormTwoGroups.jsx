@@ -93,13 +93,13 @@ function TestPackFormTwoGroups({
 
         let hasError = false;
         if (!packName.trim()) {
-            setNameError("Pack name is required");
+            setNameError("Название набора тестов обязательно");
             hasError = true;
             packNameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
         }
         const totalSelected = selectedPsycho.size + selectedCustom.size;
         if (totalSelected === 0) {
-            setTestsError("At least one test must be selected");
+            setTestsError("Необходимо выбрать хотя бы один тест");
             hasError = true;
         }
         if (hasError) return;

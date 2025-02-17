@@ -73,22 +73,22 @@ const QuizForm = ({
         const newErrors = {};
 
         if (!name.trim()) {
-            newErrors.name = 'Test name is required';
+            newErrors.name = 'Теруется ввести название теста';
         }
 
         if (!description.trim()) {
-            newErrors.description = 'Description is required';
+            newErrors.description = 'Теруется ввести описание теста';
         }
 
         const questionErrors = questions.map(question => {
             const qError = {};
 
             if (!question.question_text.trim()) {
-                qError.question_text = 'Question text is required';
+                qError.question_text = 'Теруется ввести текст вопроса';
             }
 
             if (question.isTestFormat && question.answers.some(ans => !ans.text.trim())) {
-                qError.answers = 'Answer text is required';
+                qError.answers = 'Теруется ввести текст ответа';
             }
 
             return Object.keys(qError).length > 0 ? qError : null;
