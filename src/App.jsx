@@ -70,6 +70,11 @@ function App() {
         // tg.BackButton.onClick(() => {
         //   navigate(-1);
         // });
+        tg.BackButton.onClick(() => {
+          // Добавляем тактильный отклик
+          tg.HapticFeedback.impactOccurred('light');
+          // navigate(-1);
+        });
       } else {
         // Если окно открыто вне Telegram
         console.warn("Telegram Web App not detected. Using mock data and default theme.");
