@@ -235,7 +235,7 @@ const TestPackCompletionDetails = ({ tgUser }) => {
     const handleOpenChat = (e) => {
         e.stopPropagation();
         if (username) {
-            window.Telegram.WebApp.openLink(`https://t.me/${username}`);
+            window.Telegram.WebApp.openTelegramLink(`https://t.me/${username}`);
         }
         setUsernameModalOpen(false);
     };
