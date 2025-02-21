@@ -205,7 +205,7 @@ function TestList({ tgUser }) {
                     : "bg-blue-500 hover:bg-blue-600"
                     }`}
             >
-                {isLimitReached ? "To create a test delete one" : "Создать тест"}
+                {isLimitReached ? "Вы создали максимум тестов" : "Создать тест"}
             </button>
 
             <DeleteConfirmation

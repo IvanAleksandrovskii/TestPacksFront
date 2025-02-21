@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Modal from "react-modal";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -13,13 +13,29 @@ import AITranscriptionCard from "../components/AITranscriptionCard";
 
 const PsychoTestCard = ({ test }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const cardRef = useRef(null);
+
+    const handleToggle = () => {
+        const newIsOpen = !isOpen;
+        setIsOpen(newIsOpen);
+
+        if (newIsOpen && cardRef.current) {
+            cardRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
 
     return (
-        <div className="mb-4 border rounded-lg shadow-sm bg-white text-black">
-            {/* Заголовок карточки с переключателем */}
+        <div
+            ref={cardRef}
+            className={`mb-4 border rounded-lg shadow-sm bg-white text-black transition-all duration-200 ${isOpen ? 'ring-2 ring-blue-500' : ''
+                }`}
+        >
             <div
                 className="p-4 border-b cursor-pointer flex items-center justify-between"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={handleToggle}
             >
                 <div>
                     <h3 className="text-lg font-semibold">{test.name}</h3>
@@ -60,13 +76,30 @@ const normalizeDate = (dateString) => {
 
 const CustomTestCard = ({ test }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const cardRef = useRef(null);
+
+    const handleToggle = () => {
+        const newIsOpen = !isOpen;
+        setIsOpen(newIsOpen);
+
+        if (newIsOpen && cardRef.current) {
+            cardRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
+
 
     return (
-        <div className="mb-4 border rounded-lg shadow-sm bg-white text-black">
-            {/* Заголовок карточки с переключателем */}
+        <div
+            ref={cardRef}
+            className={`mb-4 border rounded-lg shadow-sm bg-white text-black transition-all duration-200 ${isOpen ? 'ring-2 ring-blue-500' : ''
+                }`}
+        >
             <div
                 className="p-4 border-b cursor-pointer flex items-center justify-between"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={handleToggle}
             >
                 <div>
                     <h3 className="text-lg font-semibold">{test.name}</h3>

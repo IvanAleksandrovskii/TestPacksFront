@@ -33,7 +33,7 @@ const CreateQuiz = ({ tgUser }) => {
             navigate("/tests");
         } catch (error) {
             console.error('Error creating test:', error);
-            alert('Failed to create test. An error occurred. Please try again later.');
+            alert('Произошла ошибка при создании теста. Попробуйте позже.');
         } finally {
             setIsSubmitting(false);
         }

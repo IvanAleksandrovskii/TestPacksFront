@@ -249,7 +249,7 @@ function TestPackList({ creatorId }) {
                     : "bg-blue-500 hover:bg-blue-600"
                     }`}
             >
-                {isLimitReached ? "To create a pack delete one" : "Создать набор"}
+                {isLimitReached ? "Вы создали максимум наборов" : "Создать набор"}
             </button>
 
             <DeleteConfirmation

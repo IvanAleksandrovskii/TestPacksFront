@@ -111,6 +111,12 @@ const TestPackCompletionsPage = ({ tgUser, isDarkMode }) => {
         };
 
         setCurrentPage(event.selected + 1);
+
+        // Мягкий scroll вверх
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     };
 
     const handleCardClick = (completion) => {
